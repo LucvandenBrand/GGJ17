@@ -16,7 +16,7 @@ public abstract class GUIButton : GUIBlock {
                                     blockWidth, blockHeight);
         if (image != null)
         {
-            if (GUI.Button(rectangle, image))
+            if (GUI.Button(rectangle, image, GUIStyle.none))
                 DoAction();
         } else
         {
