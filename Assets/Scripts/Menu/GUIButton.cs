@@ -5,9 +5,16 @@ using UnityEngine;
 /* List of buttons to be placed relative to the screen size. */
 public abstract class GUIButton : GUIBlock {
     public string label = "Button";
+    [Range(0, 1000)]
+    public int fontSize = 30;
     public Texture image = null;
 
     protected abstract void DoAction();
+
+    public void Start()
+    {
+        style.button.fontSize = (int) (fontSize * Screen.height / 1080.0);
+    }
 
     // Draw the button.
     protected override void DrawContent(int x, int y, int blockWidth, int blockHeight)
@@ -16,11 +23,11 @@ public abstract class GUIButton : GUIBlock {
                                     blockWidth, blockHeight);
         if (image != null)
         {
-            if (GUI.Button(rectangle, image, GUIStyle.none))
+            if (GUI.Button(rectangle, image, style.button))
                 DoAction();
         } else
         {
-            if (GUI.Button(rectangle, label))
+            if (GUI.Button(rectangle, label, style.button))
                 DoAction();
         }
     }
