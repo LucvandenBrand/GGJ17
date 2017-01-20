@@ -10,19 +10,18 @@ public class AudioSystemController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         foreach (AudioImpactListener listener in audioImpactListeners)
-            listener.audioImpact(getSpeed(), getIntensity());
+            listener.AudioImpact(GetSpeed(), GetIntensity());
 	}
 
-
-    float getSpeed()
+    float GetSpeed()
     {
-        return 10;
+        return 25;
     }
 
-    float getIntensity()
+    float GetIntensity()
     {
         float speed = 10;
         this.alpha += speed;
-        return 10 * Mathf.Cos(alpha) + 2 * Mathf.Sin(alpha);
+        return 10 * Mathf.Cos(alpha) + 2 * Mathf.Sin(alpha) * Mathf.Tan(alpha);
     }
 }
