@@ -30,3 +30,5 @@ sysinfo.txt
 
 # Game Specific files
 /Assets/Scenes/KlootScenes/
+*.wav
+spectrogram.png
