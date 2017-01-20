@@ -60,8 +60,6 @@ public class Control : MonoBehaviour
 
         else if (playerNumber >= 5)
         {
-            Debug.Log(playerNumber);
-
             horInput = Input.GetAxisRaw(rightStickHorName + (playerNumber - 4));
 
             verInput = Input.GetAxisRaw(rightStickVerName + (playerNumber - 4));

@@ -15,7 +15,7 @@ public class AudioSystemController : MonoBehaviour {
 
     float GetSpeed()
     {
-        return 25;
+        return 5;
     }
 
     float GetIntensity()

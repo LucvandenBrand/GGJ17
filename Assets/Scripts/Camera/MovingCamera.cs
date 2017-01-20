@@ -36,7 +36,7 @@ public class MovingCamera : AudioImpactListener {
         float independentSpeed = speed * Time.deltaTime;
         float xMove = xUnit * independentSpeed;
         float yMove = yUnit * independentSpeed;
-        Vector3 movement = new Vector3(xMove, 0, yMove);
+        Vector3 movement = new Vector3(xMove, yMove);
         moveCamera.transform.position += movement;
     }
 }
