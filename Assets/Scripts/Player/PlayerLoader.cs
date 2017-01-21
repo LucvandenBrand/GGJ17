@@ -9,12 +9,14 @@ public class PlayerLoader : MonoBehaviour {
 
     public int playerCount = 0;
 
-	// Use this for initialization
-	void Start ()
+    //public int[] playerCount;
+
+    // Use this for initialization
+    void Start ()
     {
         string[] inputNames = Input.GetJoystickNames();
 
-        for (int i = 0; i < Input.GetJoystickNames().Length; i++)
+        for (int i = 0; i < inputNames.Length; i++)
         {
             string joystickname = inputNames[i];
 
@@ -28,7 +30,7 @@ public class PlayerLoader : MonoBehaviour {
         {
             GameObject go = Instantiate(player, gameObject.transform);
 
-            go.GetComponent<Control>().SetPlayerNumber(i);
+            //go.GetComponent<Control>().SetPlayerNumber(i);
         }
 
 	}

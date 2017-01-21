@@ -12,6 +12,10 @@ public class Control : MonoBehaviour
 
     private string rightStickVerName = "VerticalRightStick";
 
+    private string leftTriggerName = "LeftTrigger";
+
+    private string rightTriggerName = "RightTrigger";
+
     private float horInput;
 
     private float verInput;
@@ -19,7 +23,10 @@ public class Control : MonoBehaviour
     public float movementSpeed = 1f;
 
     [SerializeField]
-    private int playerNumber = 0;
+    private int playerNumberLeft = 0;
+
+    [SerializeField]
+    private int playerNumberRight = 0;
 
     private Rigidbody2D rigidbodyCurrent;
 
@@ -30,9 +37,14 @@ public class Control : MonoBehaviour
         rigidbodyCurrent = gameObject.GetComponent<Rigidbody2D>();
     }
 
-    public void SetPlayerNumber(int playerNr)
+    public void SetLeftPlayerNumber(int playerNr)
     {
-        playerNumber = playerNr;
+        playerNumberLeft = playerNr;
+    }
+
+    public void SetRightPlayerNumber(int playerNr)
+    {
+        playerNumberRight = playerNr;
     }
 
     // Update is called once per frame
@@ -51,18 +63,18 @@ public class Control : MonoBehaviour
 
     private void AssignInput()
     {
-        if (playerNumber <= 4)
+        if (playerNumberLeft > 0 && playerNumberLeft <= 4)
         {
-            horInput = Input.GetAxisRaw(leftStickHorName + playerNumber);
+            horInput = Input.GetAxisRaw(leftStickHorName + playerNumberLeft);
 
-            verInput = Input.GetAxisRaw(leftStickVerName + playerNumber);
+            verInput = Input.GetAxisRaw(leftStickVerName + playerNumberLeft);
         }
 
-        else if (playerNumber >= 5)
+        else if (playerNumberRight > 0 && playerNumberRight <= 4)
         {
-            horInput = Input.GetAxisRaw(rightStickHorName + (playerNumber - 4));
+            horInput = Input.GetAxisRaw(rightStickHorName + (playerNumberRight));
 
-            verInput = Input.GetAxisRaw(rightStickVerName + (playerNumber - 4));
+            verInput = Input.GetAxisRaw(rightStickVerName + (playerNumberRight));
         }
     }
 
