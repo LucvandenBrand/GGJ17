@@ -94,4 +94,9 @@ public class Player : MonoBehaviour
     {
         this.GetComponent<CircleCollider2D>().enabled = toggle;
     }
+
+    public int GetLives()
+    {
+        return lives;
+    }
 }

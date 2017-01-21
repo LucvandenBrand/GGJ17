@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SelectAudioFile : MonoBehaviour {
-    public string audioPath;
     public AudioSource audioSource;
     public AudioImageImporter aii;
     private AudioClip resultClip;
 	// Use this for initialization
 	void Start () {
+        SelectAudio();
+    }
+
+    public void SelectAudio()
+    {
+        string audioPath = SelectFileWindow.OpenWindow();
         LoadAudioFile(audioPath);
     }
 
