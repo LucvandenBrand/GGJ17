@@ -9,38 +9,48 @@ public class SelectAudioFile : MonoBehaviour {
     private AudioClip resultClip;
 	// Use this for initialization
 	void Start () {
-        //string url = "file:///" + audioPath;
-        //WWW www = new WWW(url);
-        Debug.Log("startSelection");
-        StartCoroutine("LoadMP3");
-        //audioSource.clip = NAudioPlayer.FromMp3Data(www.bytes);
+        LoadAudioFile(audioPath);
     }
 
-    IEnumerator LoadMP3()
+    public void LoadAudioFile(string audioPath)
+    {
+        StartCoroutine(LoadAudio(audioPath));
+        
+    }
+
+    IEnumerator LoadAudio(string audioPath)
     {
         string url = "file:///" + audioPath;
         WWW www = new WWW(url);
-        Debug.Log("starting");
         while (!www.isDone)
         {
             yield return new WaitForEndOfFrame();
         }
-        resultClip = NAudioPlayer.FromMp3Data(www.bytes);
+        if (audioPath.EndsWith(".mp3"))
+        {
+            Debug.Log("mp3");
+            resultClip = NAudioPlayer.FromMp3Data(www.bytes);
+        }
+        else
+        {
+            Debug.Log("wav");
+            resultClip = www.audioClip;
+        }
         audioSource.clip = resultClip;
-        Debug.Log("done");
-        StartAudioImageImporter();
+        StartAudioImageImporter(audioPath);
         yield return null;
     }
 
-    private void StartAudioImageImporter()
+    private void StartAudioImageImporter(string audioPath)
     {
         Debug.Log("size = " + resultClip.length);
         aii.ProcessAudioFile(audioPath, resultClip.length);
     }
 
+    //deze wegdoen als er muziek niet meer automatisch gestart moet worden
     void Update()
     {
-        if (audioSource.clip != null) { 
+        if (audioSource.clip != null) {
             if (!audioSource.isPlaying && audioSource.clip.isReadyToPlay)
                 audioSource.Play();
         }
