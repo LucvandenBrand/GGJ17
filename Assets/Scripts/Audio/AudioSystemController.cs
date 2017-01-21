@@ -38,6 +38,11 @@ public class AudioSystemController : MonoBehaviour {
         audioImpactListeners.Add(ail);
     }
 
+    public void RemoveAudioImpactListener(AudioImpactListener ail)
+    {
+        audioImpactListeners.Remove(ail);
+    }
+
     public static AudioSystemController GetAudioSystemController()
     {
         return instance;
