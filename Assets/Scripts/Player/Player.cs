@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float respawnDelay = 5f;
     [SerializeField]
+    private float respawnInvincibilityDuration = 2f;
+    [SerializeField]
     private GameObject playerDeathParticleSystem;
     [SerializeField]
     private int lives = 5;
@@ -43,6 +45,7 @@ public class Player : MonoBehaviour
             StartCoroutine("Respawn", respawnDelay);
         particles.GetComponent<ParticleSystemRenderer>().material.mainTexture = Resources.Load("Textures/Lives/" + particle) as Texture;
         ShowPlayer(false);
+        EnableCollider(false);
     }
 
     public void ShowPlayer(bool show)
@@ -50,7 +53,7 @@ public class Player : MonoBehaviour
         this.GetComponent<MeshRenderer>().enabled = show;
         foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
             renderer.enabled = show;
-        this.GetComponent<CircleCollider2D>().enabled = show;
+        //this.GetComponent<CircleCollider2D>().enabled = show;
     }
 
     IEnumerator Respawn(float spawnDelay)
@@ -62,5 +65,13 @@ public class Player : MonoBehaviour
         gameObject.transform.position = newPos;
         ShowPlayer(true);
         this.hidden = false;
+
+        yield return new WaitForSeconds(respawnInvincibilityDuration);
+        EnableCollider(true);
+    }
+
+    public void EnableCollider(bool toggle)
+    {
+        this.GetComponent<CircleCollider2D>().enabled = toggle;
     }
 }
