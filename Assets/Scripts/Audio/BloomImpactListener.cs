@@ -23,7 +23,7 @@ public class BloomImpactListener : AudioImpactListener {
         bloomOptimized = gameObject.GetComponent<BloomOptimized>();
     }
 
-    public override void AudioImpact( float speed, float intensity ) {
+    public override void AudioImpact( float intensity ) {
         intensity = Mathf.Clamp( intensity,  audioIntancity.min, audioIntancity.max);
         float tmp = Remap(intensity, 0, 1,  audioIntancity.min, audioIntancity.max);
         bloomOptimized.intensity = Remap(tmp, audioIntancity.min, audioIntancity.max,  bloomIntancity.min, bloomIntancity.max);

@@ -13,7 +13,7 @@ public class EnemyBeat : Enemy
         base.Start();
     }
 
-    public override void AudioImpact(float speed, float intensity)
+    public override void AudioImpact(float intensity)
     {
         this.curIntensity = intensity;
 
