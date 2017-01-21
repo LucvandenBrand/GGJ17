@@ -28,7 +28,7 @@ public class Spawner : AudioImpactListener {
         GameObject go = Instantiate( ObjectToSpawn[ Random.Range( 0, ObjectToSpawn.Length )], spawnPosition, Quaternion.identity ) as GameObject;
         go.transform.SetParent(this.transform);
 
-        go.AddComponent<DestroyAfter>().destroyAfter = 5;
+        //go.AddComponent<DestroyAfter>().destroyAfter = 5;
         Enemy enemy = go.GetComponent<Enemy>();
 
         enemy.movedirection = -spawnPosition.normalized;
