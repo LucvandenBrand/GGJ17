@@ -4,9 +4,6 @@ using System;
 
 public class Control : MonoBehaviour
 {
-    public AudioSource audioSource;
-    public AudioImageImporter aii;
-
     private string leftStickHorName = "HorizontalLeftStick";
 
     private string leftStickVerName = "VerticalLeftStick";
@@ -26,7 +23,6 @@ public class Control : MonoBehaviour
 
     private Rigidbody2D rigidbodyCurrent;
 
-    private float curIntensity;
 
     // Use this for initialization
     private void Start()
@@ -68,5 +64,10 @@ public class Control : MonoBehaviour
 
             verInput = Input.GetAxisRaw(rightStickVerName + (playerNumber - 4));
         }
+    }
+
+    public Vector2 GetDirection()
+    {
+        return new Vector2(horInput, verInput);
     }
 }

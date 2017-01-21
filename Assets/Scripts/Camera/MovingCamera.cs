@@ -10,15 +10,15 @@ public class MovingCamera : AudioImpactListener {
 
     [SerializeField]
     private float intensitySumThreshold = 5;
-    [SerializeField]
-    private float lives = 5;
     private Camera moveCamera;
     private FloatAverage average = new FloatAverage(15);
     private float direction = 0;
     private float intensitySum = 0;
+    [SerializeField]
+    private float acceleration = 1;
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
         base.Start();
         this.moveCamera = GetComponent<Camera>();
 	}
@@ -26,7 +26,7 @@ public class MovingCamera : AudioImpactListener {
     public override void AudioImpact(float speed, float intensity)
     {
         UpdateDirection(intensity);
-        Move(speed);
+        Move(speed*acceleration);
     }
 
     private void UpdateDirection(float intensity)
@@ -35,7 +35,7 @@ public class MovingCamera : AudioImpactListener {
         this.intensitySum += this.average.GetAverage();
         if (this.intensitySum > this.intensitySumThreshold)
         {
-            this.intensitySum = 0; //-= this.intensitySumThreshold;
+            this.intensitySum = 0;
             direction = Random.Range(0, Mathf.PI * 2);
         }
     }
