@@ -76,13 +76,23 @@
 			return float2(cos(a), sin(a)) * r;
 		}
 
+		float mod(float x, float y)
+		{
+			return x - y * floor(x / y);
+		}
+
 			fixed4 frag(v2f i) : SV_Target{
 
 			float2 uv = -1.0 + 2.0*i.position.xy / _ScreenParams.xy;
 			uv.x *= _ScreenParams.x / _ScreenParams.y;
 			float2 olduv = uv;
 			//uv = lerp(uv, Kaleidoscope(olduv, NUM_SIDES, _Time.y * 10.0), 0.5);
-			uv = lerp(uv, float2(1.0,0.5), USE_KALEIDOSCOPE);
+			//uv = lerp(uv, float2(1.0,0.5), USE_KALEIDOSCOPE);
+			float angle = 3.1415926535 / 8.0;
+			float r = length(uv * 0.5);
+			float a = atan2(uv.x, uv.y) / angle;
+			a = lerp(frac(a), 1.0 - frac(a), mod(floor(a), 2.0)) * angle;
+			uv = float2(cos(a), sin(a)) * r;
 			//uv.y = 1.0 - uv.y;
 
 			// Background
@@ -101,7 +111,12 @@
 				float rad = 0.1 + 0.5*siz;
 				float2  pos = float2(pox, -1.0 - rad + (2.0 + 2.0*rad)*fmod(pha + 0.6*_Time.y*(0.2 + 0.8*siz),1.0));
 				float dis = length(uv - pos);
-				float3 col = lerp(float3(0.94,0.3,0.0), float3(0.1,0.4,0.8), 0.5 + 0.5*sin(float(i)*1.2 + 1.9));
+				//float3 col = lerp(float3(0.94,0.3,0.0), float3(0.1,0.4,0.8), 0.5 + 0.5*sin(float(i)*1.2 + 1.9));
+				///float3 col = lerp(float3(0.9, 0.9, 0.9), float3(0.1, 0.1, 0.1), 0.5 + 0.5*sin(float(i)*1.2 + 1.9));
+				float3 col = float3(0.0,0.0,0.0);
+				col.r = lerp(0.1, 0.9, 0.5 + 0.5 * sin(float(i) * 123.0));
+				col.g = lerp(0.1, 0.9, 0.5 + 0.5 * sin(float(i) * 151.0));
+				col.b = lerp(0.1, 0.9, 0.5 + 0.5 * sin(float(i) * 253.0));
 
 				// Add a black outline around each bubble
 				//col += 8.0*smoothstep(rad*0.95, rad, dis);
@@ -115,7 +130,8 @@
 			}
 
 			// Vignetting    
-			outColour *= sqrt(1.5 - 0.5*length(uv));
+			outColour *= sqrt(1.5 - 0.7*length(uv));
+			;
 
 			return outColour;
 		}
