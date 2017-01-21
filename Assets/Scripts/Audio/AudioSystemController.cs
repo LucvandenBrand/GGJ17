@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using UnityEngine;
 
 
@@ -17,8 +15,8 @@ public enum AudioImpactType {
 public class AudioSystemController : MonoBehaviour {
     private static AudioSystemController instance = null;
 
-    private List<AudioImpactListener> audioImpactListeners = new List<AudioImpactListener>();
-    private Dictionary<AudioImpactListener, AudioImpactType> dictionary;
+    private List< KeyValuePair<AudioImpactListener, AudioImpactType> > audioImpactListeners = new List< KeyValuePair<AudioImpactListener, AudioImpactType> >();
+//    private Dictionary<AudioImpactListener, AudioImpactType> dictionary = new Dictionary<AudioImpactListener, AudioImpactType>();
     public AudioSource audioSource;
     public AudioImageImporter aii;
     private float alpha = 0;
@@ -30,10 +28,10 @@ public class AudioSystemController : MonoBehaviour {
     }
 
     void Update() {
-        foreach (AudioImpactListener listener in audioImpactListeners) {
-            switch (dictionary[listener]) {
+        for (int i = 0; i < audioImpactListeners.Count; i++) {
+            switch (audioImpactListeners[i].Value) {
                 case AudioImpactType.INTENSITY:
-                    listener.AudioImpact(GetIntensity());
+                    audioImpactListeners[i].Key.AudioImpact(GetIntensity());
                     break;
                 case AudioImpactType.SPEED:
                     throw new NotImplementedException();
@@ -42,6 +40,7 @@ public class AudioSystemController : MonoBehaviour {
                     throw new NotImplementedException();
                     break;
             }
+            
         }
     }
 
@@ -59,13 +58,11 @@ public class AudioSystemController : MonoBehaviour {
     }
 
     public void AddAudioImpactListener( AudioImpactListener ail, AudioImpactType impactType = AudioImpactType.INTENSITY ) {
-        audioImpactListeners.Add(ail);
-        dictionary.Add(ail, impactType);
+        audioImpactListeners.Add( new KeyValuePair<AudioImpactListener, AudioImpactType>(ail, impactType) );
     }
 
     public void RemoveAudioImpactListener( AudioImpactListener ail, AudioImpactType impactType = AudioImpactType.INTENSITY ) {
-        audioImpactListeners.Remove(ail);
-        dictionary.Add(ail, impactType);
+        audioImpactListeners.Remove( new KeyValuePair<AudioImpactListener, AudioImpactType>(ail, impactType) );
     }
 
     public static AudioSystemController GetAudioSystemController() {
