@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 /* A camera that always moves in one given direction. */
 [RequireComponent(typeof(Camera))]
 public class MovingCamera : AudioImpactListener {
-    [Range(0.0f, 1.0f)]
-    public float sensitivity = 0.5f;
+
+    [SerializeField]
+    private float intensitySumThreshold = 5;
+
     private Camera moveCamera;
     private FloatAverage average = new FloatAverage(15);
     private float direction = 0;
+    private float intensitySum = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -25,8 +30,12 @@ public class MovingCamera : AudioImpactListener {
     private void UpdateDirection(float intensity)
     {
         this.average.Add(intensity);
-        direction += average.GetAverage()*sensitivity;
-        direction %= (Mathf.PI * 2);
+        this.intensitySum += this.average.GetAverage();
+        if (this.intensitySum > this.intensitySumThreshold)
+        {
+            this.intensitySum = 0; //-= this.intensitySumThreshold;
+            direction = Random.Range(0, Mathf.PI * 2);
+        }
     }
 
     private void Move(float speed)
