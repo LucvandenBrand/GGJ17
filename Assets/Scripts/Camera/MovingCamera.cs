@@ -10,6 +10,9 @@ public class MovingCamera : AudioImpactListener {
 
     [SerializeField]
     private float intensitySumThreshold = 5;
+    [SerializeField]
+    private float lives = 5;
+    
 
     private Camera moveCamera;
     private FloatAverage average = new FloatAverage(15);

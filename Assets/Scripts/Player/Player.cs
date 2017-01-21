@@ -2,21 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* Player behavior. */
 public class Player : MonoBehaviour
 {
     [SerializeField]
     private float respawnDelay = 5f;
     [SerializeField]
     private GameObject playerDeathParticleSystem;
+    [SerializeField]
+    private int lives = 5;
 
     public void OnBecameInvisible()
     {
+        lives = Mathf.Max(0, lives - 1);
         GameObject particles = Instantiate(playerDeathParticleSystem, Camera.main.transform);
         particles.transform.position = gameObject.transform.position;
         Vector2 LookAtPoint = new Vector2(Camera.main.transform.position.x, Camera.main.transform.position.y);
         particles.transform.LookAt(LookAtPoint);
-
-        StartCoroutine("Respawn", respawnDelay);
+        string particle = lives.ToString();
+        if (lives < 1)
+            particle = "skull";
+        else
+            StartCoroutine("Respawn", respawnDelay);
+        particles.GetComponent<ParticleSystemRenderer>().material.mainTexture = Resources.Load("Textures/Lives/" + particle) as Texture;
+        ShowPlayer(false);
     }
 
     public void ShowPlayer(bool show)
@@ -27,8 +36,6 @@ public class Player : MonoBehaviour
 
     IEnumerator Respawn(float spawnDelay)
     {
-        ShowPlayer(false);
-
         yield return new WaitForSeconds(spawnDelay);
         GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
         Vector3 newPos = new Vector3(camera.transform.position.x, 
