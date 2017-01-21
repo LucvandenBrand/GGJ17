@@ -8,9 +8,12 @@ using UnityStandardAssets.ImageEffects;
 public class BloomImpactListener : AudioImpactListener {
 
     [Header("these values")]
-    public FloatRange audioIntancity;
-    [Header("remap to these values")]
-    public FloatRange bloomIntancity;
+    [SerializeField]
+    private FloatRange audioIntancity;
+
+    [Header("are remap to these values")]
+    [SerializeField]
+    private FloatRange bloomIntancity;
 
     private BloomOptimized bloomOptimized;
 
@@ -21,19 +24,20 @@ public class BloomImpactListener : AudioImpactListener {
     }
 
     public override void AudioImpact( float speed, float intensity ) {
-        float tmp = remap(intensity, 0, 1,  audioIntancity.min, audioIntancity.max);
-        bloomOptimized.intensity = remap(tmp, audioIntancity.min, audioIntancity.max,  bloomIntancity.min, bloomIntancity.max);
+        intensity = Mathf.Clamp( intensity,  audioIntancity.min, audioIntancity.max);
+        float tmp = Remap(intensity, 0, 1,  audioIntancity.min, audioIntancity.max);
+        bloomOptimized.intensity = Remap(tmp, audioIntancity.min, audioIntancity.max,  bloomIntancity.min, bloomIntancity.max);
     }
 
-    private float remap (float v, float a1, float a2, float b1, float b2) {
-        return (v - a1) / (b2 - a1) * (b2 - a1) + a2;;
+    private float Remap (float value, float from1, float to1, float from2, float to2) {
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 }
 
 
 
 
-[SerializeField]
+[System.Serializable]
 public class FloatRange {
     [Range(0,1)]
     public float min;
