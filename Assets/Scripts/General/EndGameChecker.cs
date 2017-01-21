@@ -27,7 +27,7 @@ public class EndGameChecker : MonoBehaviour {
             OnButtonStartGame();
             if (!gameOver)
             {
-                ShowLeaderBoard(players);
+                ShowLeaderBoard();
                 gameOver = true;
             } else
             {
@@ -37,17 +37,17 @@ public class EndGameChecker : MonoBehaviour {
     }
 
     // Show the leaderboard.
-    private void ShowLeaderBoard(Player[] players)
+    private void ShowLeaderBoard()
     {
-        Array.Sort(players, delegate (Player p1, Player p2) {
-            return p1.GetLiveTime().CompareTo(p2.GetLiveTime());
-        });
         Canvas screen = Instantiate(winScreen);
         screen.transform.Find("Quote").GetComponent<Text>().text = quoteMaker.GetQuote();
     }
 
     private void SetLeaderBoardPosition(Player[] players)
     {
+        Array.Sort(players, delegate (Player p1, Player p2) {
+            return 1-p1.GetLiveTime().CompareTo(p2.GetLiveTime());
+        });
         players[0].ShowPlayer(true);
         players[0].GetComponent<Control>().movementSpeed = 0;
         Vector3 newPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width * 0.11f, Screen.height * 0.7f));
