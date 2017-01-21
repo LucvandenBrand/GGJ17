@@ -27,7 +27,7 @@ public class SoundMovement : AudioImpactListener
     // Update is called once per frame
     void FixedUpdate()
     {
-        float movement = (curIntensity - 0.25f) * 2)
+        float movement = (curIntensity - 0.25f) * 2;
         if (movement < 0)
         {
             movement = 0;
