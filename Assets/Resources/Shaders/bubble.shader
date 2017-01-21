@@ -56,13 +56,38 @@
 		return o;
 		}
 
+		// ---- change here kaleidoscope size and toggle on/off----
+		const float USE_KALEIDOSCOPE = 1.0;
+		const float NUM_SIDES = 8.0;
+
+		// math const
+		const float PI = 3.14159265359;
+		const float DEG_TO_RAD = 0.01745329251; //PI / 180.0;
+
+
+		float2 Kaleidoscope(float2 uv, float n, float bias) {
+			float angle = PI / n;
+
+			float r = length(uv*.5);
+			float a = atan2(uv.x, uv.y) / angle;
+
+			a = lerp(frac(a), 1.0 - frac(a), fmod(floor(a), 2.0)) * angle;
+
+			return float2(cos(a), sin(a)) * r;
+		}
+
 			fixed4 frag(v2f i) : SV_Target{
 
 			float2 uv = -1.0 + 2.0*i.position.xy / _ScreenParams.xy;
 			uv.x *= _ScreenParams.x / _ScreenParams.y;
+			float2 olduv = uv;
+			//uv = lerp(uv, Kaleidoscope(olduv, NUM_SIDES, _Time.y * 10.0), 0.5);
+			uv = lerp(uv, float2(1.0,0.5), USE_KALEIDOSCOPE);
+			//uv.y = 1.0 - uv.y;
 
 			// Background
-			fixed4 outColour = fixed4(0.8 + 0.2*uv.y,0.8 + 0.2*uv.y,0.8 + 0.2*uv.y,1);
+			float bgHue = 0.1;
+			fixed4 outColour = fixed4(bgHue + 0.2*uv.y, bgHue + 0.2*uv.y, bgHue + 0.2*uv.y,1);
 
 			// Bubbles
 			for (int i = 0; i < 40; i++) {
@@ -85,7 +110,8 @@
 				float f = length(uv - pos) / rad;
 				f = sqrt(clamp(1.0 - f*f,0.0,1.0));
 
-				outColour.rgb -= col.zyx *(1.0 - smoothstep(rad*0.95, rad, dis)) * f;
+
+				outColour.rgb += col.zyx *(1.0 - smoothstep(rad*0.95, rad, dis)) * f;
 			}
 
 			// Vignetting    
