@@ -4,16 +4,15 @@ using UnityEngine;
 using System.Diagnostics;
 using System.IO;
 
-public class audioImageImporter : MonoBehaviour {
+public class AudioImageImporter : MonoBehaviour {
     [SerializeField] private string audioFileName;
     [SerializeField] private float audioLength;
     [SerializeField] private int samplesPerSecond;
-    private int columCntr = 0;
     Texture2D freqArr;
 
     // Use this for initialization
-    void Start () {
-        CreateAudioPNG();
+    public void Start () {
+        //CreateAudioPNG();
         LoadAudioPNG();
     }
 
@@ -22,7 +21,8 @@ public class audioImageImporter : MonoBehaviour {
         //UnityEngine.Debug.Log("Starting analysis");
         Process process = new Process();
 
-        process.StartInfo.FileName = "sox";
+        process.StartInfo.FileName = @"sox\sox";
+        process.StartInfo.WorkingDirectory = Application.dataPath;
         process.StartInfo.Arguments = audioFileName + @" -n spectrogram -r -m -x " + SampleFromTime(audioLength);
         process.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
         process.StartInfo.UseShellExecute = false;
@@ -57,12 +57,12 @@ public class audioImageImporter : MonoBehaviour {
         //UnityEngine.Debug.Log("Everything Done");
     }
 
-    int SampleFromTime(float timeInS)
+    private int SampleFromTime(float timeInS)
     {
         return (int)(timeInS * samplesPerSecond);
     }
 
-    void LoadAudioPNG()
+    private void LoadAudioPNG()
     {
         byte[] image = System.IO.File.ReadAllBytes("spectrogram.png");
         freqArr = new Texture2D(2, 2);
@@ -70,7 +70,7 @@ public class audioImageImporter : MonoBehaviour {
         //UnityEngine.Debug.Log(freqArr.GetPixels(0, 0, 1, freqArr.height).Length);
     }
 
-    float GetIntensity(float time)
+    public float GetIntensity(float time)
     {
         float result = 0;
         Color[] colum = freqArr.GetPixels(SampleFromTime(time), 0, 1, freqArr.height);
@@ -78,6 +78,7 @@ public class audioImageImporter : MonoBehaviour {
         {
             result += colum[i].grayscale;
         }
+        // UnityEngine.Debug.Log(result / colum.Length);
         return result/colum.Length;
     }
 }

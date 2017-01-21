@@ -5,6 +5,8 @@ using UnityEngine;
 /* Controls all audio elements. */
 public class AudioSystemController : MonoBehaviour {
     public List<AudioImpactListener> audioImpactListeners;
+    public AudioSource audioSource;
+    public AudioImageImporter aii;
     private float alpha = 0;
 	
 	// Update is called once per frame
@@ -20,8 +22,6 @@ public class AudioSystemController : MonoBehaviour {
 
     float GetIntensity()
     {
-        float speed = 10;
-        this.alpha += speed;
-        return 10 * Mathf.Cos(alpha) + 2 * Mathf.Sin(alpha) * Mathf.Tan(alpha);
+        return aii.GetIntensity(audioSource.time);
     }
 }
