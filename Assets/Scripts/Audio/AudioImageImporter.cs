@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
+using Application = UnityEngine.Application;
 
 public class AudioImageImporter : MonoBehaviour {
     private string audioFileName;
@@ -77,19 +79,39 @@ public class AudioImageImporter : MonoBehaviour {
 
     public float GetIntensity(float time)
     {
+        if (freqArr == null) 
+            LoadAudioPNG();
+        
         float result = 0;
         Color[] colum = freqArr.GetPixels(SampleFromTime(time), 0, 1, freqArr.height);
-        for (int i=0; i<colum.Length; i++)
-        {
+        for (int i=0; i < colum.Length; i++)
             result += colum[i].grayscale;
-        }
+        
         //UnityEngine.Debug.Log(result / colum.Length);
 
         float intensity = (result/colum.Length - intensityDecreaser);
         if (intensity < 0)
-        {
             intensity = 0;
-        }
+
+        return intensity * intensityMultiplier;
+    }
+
+    public float GetBaseIntensity(float time)
+    {
+        if (freqArr == null) 
+            LoadAudioPNG();
+        
+        float result = 0;
+        Color[] colum = freqArr.GetPixels( SampleFromTime(time), 0, 1, freqArr.height);
+
+        for (int i=0; i < colum.Length / 2; i++)
+            result += colum[i].grayscale - colum[(colum.Length / 2) + i].grayscale;
+        
+        //UnityEngine.Debug.Log(result / colum.Length);
+
+        float intensity = (result/colum.Length - intensityDecreaser);
+        if (intensity < 0)
+            intensity = 0;
 
         return intensity * intensityMultiplier;
     }
