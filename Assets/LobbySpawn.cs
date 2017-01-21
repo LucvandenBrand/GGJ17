@@ -76,7 +76,7 @@ public class LobbySpawn : MonoBehaviour {
 
             Object.DontDestroyOnLoad(players);
 
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(2,LoadSceneMode.Single);
         }
     }
 }

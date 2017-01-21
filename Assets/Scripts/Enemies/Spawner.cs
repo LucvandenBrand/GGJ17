@@ -25,13 +25,13 @@ public class Spawner : AudioImpactListener {
     void SpawnEnemy() {
         Vector2 cameraVector2D = new Vector2(Camera.main.gameObject.transform.position.x, Camera.main.gameObject.transform.position.y);
         Vector2 spawnPosition = cameraVector2D + Random.insideUnitCircle.normalized * length;
-        GameObject go = Instantiate( ObjectToSpawn[ Random.Range( 0, ObjectToSpawn.Length )], spawnPosition, Quaternion.identity ) as GameObject;
-        go.transform.SetParent(this.transform);
+        GameObject go = Instantiate( ObjectToSpawn[ Random.Range( 0, ObjectToSpawn.Length )], spawnPosition, Quaternion.FromToRotation(spawnPosition.normalized, Vector3.zero), this.transform ) as GameObject;
+        // go.transform.SetParent(this.transform);
 
-        go.AddComponent<DestroyAfter>().destroyAfter = 5;
-        Enemy enemy = go.GetComponent<Enemy>();
+        //go.AddComponent<DestroyAfter>().destroyAfter = 5;
+        //Enemy enemy = go.GetComponent<Enemy>();
 
-        enemy.movedirection = -spawnPosition.normalized;
-        enemy.speed = enemySpeed;
+        //enemy.movedirection = -spawnPosition.normalized;
+        //enemy.speed = enemySpeed;
     }
 }
