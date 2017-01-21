@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject playerDeathParticleSystem;
     [SerializeField]
+    private GameObject playerCollisionParticleSystem;
+    [SerializeField]
     private int lives = 5;
     private bool hidden = false;
 
@@ -34,6 +36,12 @@ public class Player : MonoBehaviour
             this.hidden = true;
             GameObject.Destroy(coll.gameObject);
             kill();
+        }
+
+        if (!hidden && coll.gameObject.tag == "Player")
+        {
+            GameObject particles = Instantiate(playerCollisionParticleSystem, Camera.main.transform);
+            particles.transform.position = coll.transform.position;
         }
     }
 
