@@ -6,7 +6,7 @@ using UnityEngine;
 public class AudioSystemController : MonoBehaviour {
     private static AudioSystemController instance = null;
 
-    public List<AudioImpactListener> audioImpactListeners;
+    private List<AudioImpactListener> audioImpactListeners = new List<AudioImpactListener>();
     public AudioSource audioSource;
     public AudioImageImporter aii;
     private float alpha = 0;
