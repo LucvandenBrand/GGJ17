@@ -7,6 +7,7 @@ public class Enemy : AudioImpactListener {
 	public Vector3 movedirection;
     [HideInInspector]
     public float speed;
+    public float curIntensity = 0;
 
     public void Start()
     {
@@ -15,11 +16,11 @@ public class Enemy : AudioImpactListener {
 
     public override void AudioImpact(float speed, float intensity)
     {
-        this.speed = intensity;
+        this.curIntensity = intensity;
     }
 
 
     void Update() {
-        transform.Translate( movedirection * speed );
+        transform.Translate( movedirection * speed * curIntensity );
     }
 }

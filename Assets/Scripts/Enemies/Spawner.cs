@@ -10,9 +10,7 @@ public class Spawner : AudioImpactListener {
     private float spawnThreshold = 10;
     private float intensitySum = 0;
     [SerializeField]
-    private float maxSpeed = 0.2f;
-    [SerializeField]
-    private float minSpeed = 0.1f;
+    private float enemySpeed = 0.2f;
 
     public override void AudioImpact(float speed, float intensity)
     {
@@ -34,6 +32,6 @@ public class Spawner : AudioImpactListener {
         Enemy enemy = go.GetComponent<Enemy>();
 
         enemy.movedirection = -spawnPosition.normalized;
-        enemy.speed = Random.Range( minSpeed, maxSpeed );
+        enemy.speed = enemySpeed;
     }
 }
