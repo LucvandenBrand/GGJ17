@@ -5,6 +5,7 @@ public class PlayerLoader : MonoBehaviour {
 
     [SerializeField]
     private GameObject player;
+    public AudioSystemController audioSystemController;
 
     public int playerCount = 0;
 
@@ -25,9 +26,10 @@ public class PlayerLoader : MonoBehaviour {
 
         for (int i = 1; i <= playerCount; i++)
         {
-            Instantiate(player, gameObject.transform);
+            GameObject go = Instantiate(player, gameObject.transform);
 
-            player.GetComponent<Control>().SetPlayerNumber(i);
+            go.GetComponent<Control>().SetPlayerNumber(i);
+            audioSystemController.AddAudioImpactListener(go.GetComponent<Control>());
         }
 
 	}

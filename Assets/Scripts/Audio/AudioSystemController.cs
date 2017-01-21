@@ -24,4 +24,9 @@ public class AudioSystemController : MonoBehaviour {
     {
         return aii.GetIntensity(audioSource.time);
     }
+
+    public void AddAudioImpactListener(AudioImpactListener ail)
+    {
+        audioImpactListeners.Add(ail);
+    }
 }

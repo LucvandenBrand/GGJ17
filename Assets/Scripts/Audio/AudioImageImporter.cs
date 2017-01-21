@@ -8,6 +8,7 @@ public class AudioImageImporter : MonoBehaviour {
     [SerializeField] private string audioFileName;
     [SerializeField] private float audioLength;
     [SerializeField] private int samplesPerSecond;
+    [SerializeField] private int intensityMultiplier;
     Texture2D freqArr;
 
     // Use this for initialization
@@ -78,7 +79,7 @@ public class AudioImageImporter : MonoBehaviour {
         {
             result += colum[i].grayscale;
         }
-        // UnityEngine.Debug.Log(result / colum.Length);
-        return result/colum.Length;
+        //UnityEngine.Debug.Log(result / colum.Length);
+        return result/colum.Length * intensityMultiplier;
     }
 }

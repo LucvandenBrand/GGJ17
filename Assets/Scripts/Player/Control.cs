@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class Control : MonoBehaviour
+public class Control : AudioImpactListener
 {
+    public AudioSource audioSource;
+    public AudioImageImporter aii;
 
     private string leftStickHorName = "HorizontalLeftStick";
 
@@ -23,6 +26,8 @@ public class Control : MonoBehaviour
 
     private Rigidbody2D rigidbodyCurrent;
 
+    private float curIntensity;
+
     // Use this for initialization
     private void Start()
     {
@@ -35,11 +40,10 @@ public class Control : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
     {
         AssignInput();
-
-        float independentSpeed = movementSpeed * Time.deltaTime;
+        float independentSpeed = movementSpeed * Time.deltaTime * curIntensity;
         float angle = Mathf.Atan2(verInput, horInput);
         float amplitude = Mathf.Sqrt(verInput * verInput + horInput * horInput);
 
@@ -66,5 +70,8 @@ public class Control : MonoBehaviour
         }
     }
 
-
+    public override void AudioImpact(float speed, float intensity)
+    {
+        curIntensity = intensity;
+    }
 }

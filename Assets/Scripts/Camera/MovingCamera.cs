@@ -4,7 +4,8 @@ using UnityEngine;
 
 /* A camera that always moves in one given direction. */
 [RequireComponent(typeof(Camera))]
-public class MovingCamera : AudioImpactListener {
+public class MovingCamera : AudioImpactListener
+{
     [Range(0.0f, 1.0f)]
     public float sensitivity = 0.5f;
     private Camera moveCamera;
