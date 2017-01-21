@@ -6,10 +6,16 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private float respawnDelay = 5f;
+    [SerializeField]
+    private GameObject playerDeathParticleSystem;
 
     public void OnBecameInvisible()
     {
-        ShowPlayer(false);
+        GameObject particles = Instantiate(playerDeathParticleSystem, Camera.main.transform);
+        particles.transform.position = gameObject.transform.position;
+        Vector2 LookAtPoint = new Vector2(Camera.main.transform.position.x, Camera.main.transform.position.y);
+        particles.transform.LookAt(LookAtPoint);
+
         StartCoroutine("Respawn", respawnDelay);
     }
 
@@ -21,6 +27,8 @@ public class Player : MonoBehaviour
 
     IEnumerator Respawn(float spawnDelay)
     {
+        ShowPlayer(false);
+
         yield return new WaitForSeconds(spawnDelay);
         GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
         Vector3 newPos = new Vector3(camera.transform.position.x, 
