@@ -14,7 +14,7 @@ public class AudioImageImporter : MonoBehaviour {
 
     // Use this for initialization
     public void Start () {
-        //CreateAudioPNG();
+        CreateAudioPNG();
         LoadAudioPNG();
     }
 
@@ -23,7 +23,7 @@ public class AudioImageImporter : MonoBehaviour {
         //UnityEngine.Debug.Log("Starting analysis");
         Process process = new Process();
 
-        process.StartInfo.FileName = @"sox";
+        process.StartInfo.FileName = @"sox\sox.exe";
         process.StartInfo.WorkingDirectory = Application.dataPath;
         process.StartInfo.Arguments = audioFileName + @" -n spectrogram -r -m -x " + SampleFromTime(audioLength);
         process.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
