@@ -31,6 +31,7 @@ public class Control : AudioImpactListener
     // Use this for initialization
     private void Start()
     {
+        base.Start();
         rigidbodyCurrent = gameObject.GetComponent<Rigidbody2D>();
     }
 

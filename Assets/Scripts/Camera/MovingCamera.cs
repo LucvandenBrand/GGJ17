@@ -14,6 +14,7 @@ public class MovingCamera : AudioImpactListener
 
 	// Use this for initialization
 	void Start () {
+        base.Start();
         this.moveCamera = GetComponent<Camera>();
 	}
 

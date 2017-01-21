@@ -29,7 +29,6 @@ public class PlayerLoader : MonoBehaviour {
             GameObject go = Instantiate(player, gameObject.transform);
 
             go.GetComponent<Control>().SetPlayerNumber(i);
-            audioSystemController.AddAudioImpactListener(go.GetComponent<Control>());
         }
 
 	}
