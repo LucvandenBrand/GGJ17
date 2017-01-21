@@ -8,7 +8,7 @@ public class Enemy : AudioImpactListener
     public Vector3 movedirection;
     [HideInInspector]
     public float speed;
-    public float curIntensity = 0;
+    private float curIntensity = 0;
     [HideInInspector]
     public float sizeScale = 2;
 

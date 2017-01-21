@@ -11,10 +11,22 @@ public class Player : MonoBehaviour
     private GameObject playerDeathParticleSystem;
     [SerializeField]
     private int lives = 5;
+    private bool hidden = false;
 
     public void OnBecameInvisible()
     {
-        kill();
+        if (!hidden)
+            kill();
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (!hidden && coll.gameObject.tag == "Enemy")
+        {
+            this.hidden = true;
+            GameObject.Destroy(coll.gameObject);
+            kill();
+        }
     }
 
     public void kill()
@@ -49,5 +61,6 @@ public class Player : MonoBehaviour
                                      camera.transform.position.y, transform.position.z);
         gameObject.transform.position = newPos;
         ShowPlayer(true);
+        this.hidden = false;
     }
 }
