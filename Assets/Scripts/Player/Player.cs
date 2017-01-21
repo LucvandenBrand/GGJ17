@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int lives = 5;
     private bool hidden = false;
+    private float liveTime = 0;
 
     // Choose random iris color at start.
     public void Start()
@@ -23,6 +24,12 @@ public class Player : MonoBehaviour
         Color irisColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), 1.0f, 0.7f);
         transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", irisColor);
         transform.Find("Iris").GetComponent<TrailRenderer>().startColor = irisColor;//.material.SetColor("_Color", irisColor);
+    }
+
+    public void Update()
+    {
+        if (lives > 0)
+            this.liveTime += Time.deltaTime;
     }
 
     public void OnBecameInvisible()
@@ -98,5 +105,10 @@ public class Player : MonoBehaviour
     public int GetLives()
     {
         return lives;
+    }
+
+    public float GetLiveTime()
+    {
+        return liveTime;
     }
 }
