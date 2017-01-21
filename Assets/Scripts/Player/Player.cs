@@ -12,13 +12,17 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject playerDeathParticleSystem;
     [SerializeField]
+    private GameObject playerCollisionParticleSystem;
+    [SerializeField]
     private int lives = 5;
     private bool hidden = false;
 
     // Choose random iris color at start.
     public void Start()
     {
-        transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", Random.ColorHSV());
+        Color irisColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), 1.0f, 0.7f);
+        transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", irisColor);
+        transform.Find("Iris").GetComponent<TrailRenderer>().startColor = irisColor;//.material.SetColor("_Color", irisColor);
     }
 
     public void OnBecameInvisible()
@@ -34,6 +38,12 @@ public class Player : MonoBehaviour
             this.hidden = true;
             GameObject.Destroy(coll.gameObject);
             kill();
+        }
+
+        if (!hidden && coll.gameObject.tag == "Player")
+        {
+            GameObject particles = Instantiate(playerCollisionParticleSystem, Camera.main.transform);
+            particles.transform.position = coll.transform.position;
         }
     }
 
@@ -61,6 +71,8 @@ public class Player : MonoBehaviour
         this.GetComponent<MeshRenderer>().enabled = show;
         foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
             renderer.enabled = show;
+        foreach (TrailRenderer renderer in this.GetComponentsInChildren<TrailRenderer>())
+            renderer.enabled = show;
     }
 
     IEnumerator Respawn(float spawnDelay)
@@ -81,5 +93,10 @@ public class Player : MonoBehaviour
     public void EnableCollider(bool toggle)
     {
         this.GetComponent<CircleCollider2D>().enabled = toggle;
+    }
+
+    public int GetLives()
+    {
+        return lives;
     }
 }
