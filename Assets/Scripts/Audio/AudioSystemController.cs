@@ -4,12 +4,20 @@ using UnityEngine;
 
 /* Controls all audio elements. */
 public class AudioSystemController : MonoBehaviour {
+    private static AudioSystemController instance = null;
+
     public List<AudioImpactListener> audioImpactListeners;
     public AudioSource audioSource;
     public AudioImageImporter aii;
     private float alpha = 0;
 	
-	// Update is called once per frame
+	
+
+    public void Awake()
+    {
+        instance = this;
+    }
+
 	void Update () {
         foreach (AudioImpactListener listener in audioImpactListeners)
             listener.AudioImpact(GetSpeed(), GetIntensity());
@@ -23,5 +31,15 @@ public class AudioSystemController : MonoBehaviour {
     float GetIntensity()
     {
         return aii.GetIntensity(audioSource.time);
+    }
+
+    public void AddAudioImpactListener(AudioImpactListener ail)
+    {
+        audioImpactListeners.Add(ail);
+    }
+
+    public static AudioSystemController GetAudioSystemController()
+    {
+        return instance;
     }
 }

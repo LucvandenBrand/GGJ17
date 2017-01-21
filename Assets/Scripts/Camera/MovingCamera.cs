@@ -12,8 +12,6 @@ public class MovingCamera : AudioImpactListener {
     private float intensitySumThreshold = 5;
     [SerializeField]
     private float lives = 5;
-    
-
     private Camera moveCamera;
     private FloatAverage average = new FloatAverage(15);
     private float direction = 0;
@@ -21,6 +19,7 @@ public class MovingCamera : AudioImpactListener {
 
 	// Use this for initialization
 	void Start () {
+        base.Start();
         this.moveCamera = GetComponent<Camera>();
 	}
 
