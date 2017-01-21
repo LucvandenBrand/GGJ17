@@ -12,7 +12,7 @@ public class Spawner : AudioImpactListener {
     [SerializeField]
     private float enemySpeed = 0.2f;
 
-    public override void AudioImpact(float speed, float intensity)
+    public override void AudioImpact(float intensity)
     {
         intensitySum += intensity;
         if (intensitySum > spawnThreshold)

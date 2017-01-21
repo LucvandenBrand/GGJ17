@@ -27,7 +27,7 @@ public class Enemy : AudioImpactListener
         gameObject.AddComponent<DestroyAfter>().destroyAfter = destroyAfterSeconds;
     }
 
-    public override void AudioImpact(float speed, float intensity)
+    public override void AudioImpact(float intensity)
     {
         this.curIntensity = intensity;
 

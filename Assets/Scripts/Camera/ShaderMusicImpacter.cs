@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShaderMusicImpacter : AudioImpactListener {
     private FloatAverage average = new FloatAverage(15);
-    public override void AudioImpact(float speed, float intensity)
+    public override void AudioImpact(float intensity)
     {
         average.Add(intensity);
     }

@@ -22,7 +22,7 @@ public class EnemySine : Enemy
         transform.localScale = new Vector3(0.2f * sizeScale, 0.2f * sizeScale);
     }
 
-    public override void AudioImpact(float speed, float intensity)
+    public override void AudioImpact(float intensity)
     {
         this.curIntensity = intensity;
 

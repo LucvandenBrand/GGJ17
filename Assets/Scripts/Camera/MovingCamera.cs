@@ -23,10 +23,10 @@ public class MovingCamera : AudioImpactListener {
         this.moveCamera = GetComponent<Camera>();
 	}
 
-    public override void AudioImpact(float speed, float intensity)
+    public override void AudioImpact(float intensity)
     {
         UpdateDirection(intensity);
-        Move(speed*acceleration);
+        Move( 5 * acceleration);
     }
 
     private void UpdateDirection(float intensity)

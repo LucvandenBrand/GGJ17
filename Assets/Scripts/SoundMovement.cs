@@ -14,7 +14,7 @@ public class SoundMovement : AudioImpactListener
         base.Start();
     }
 
-    public override void AudioImpact(float speed, float intensity)
+    public override void AudioImpact(float intensity)
     {
         curIntensity = intensity;
     }
