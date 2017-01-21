@@ -66,7 +66,7 @@ public class AudioImageImporter : MonoBehaviour {
 
     private void LoadAudioPNG()
     {
-        byte[] image = System.IO.File.ReadAllBytes("spectrogram.png");
+        byte[] image = System.IO.File.ReadAllBytes(@"Assets\spectrogram.png");
         freqArr = new Texture2D(2, 2);
         freqArr.LoadImage(image);
         //UnityEngine.Debug.Log(freqArr.GetPixels(0, 0, 1, freqArr.height).Length);
