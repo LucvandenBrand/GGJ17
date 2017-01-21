@@ -82,7 +82,12 @@
 			uv.x *= _ScreenParams.x / _ScreenParams.y;
 			float2 olduv = uv;
 			//uv = lerp(uv, Kaleidoscope(olduv, NUM_SIDES, _Time.y * 10.0), 0.5);
-			uv = lerp(uv, float2(1.0,0.5), USE_KALEIDOSCOPE);
+			//uv = lerp(uv, float2(1.0,0.5), USE_KALEIDOSCOPE);
+			float angle = 3.1415926535 / 4.0;
+			float r = length(uv * 0.5);
+			float a = atan2(uv.x, uv.y) / angle;
+			a = lerp(frac(a), 1.0 - frac(a), fmod(floor(a), 2.0)) * angle;
+			uv = float2(cos(a), sin(a)) * r;
 			//uv.y = 1.0 - uv.y;
 
 			// Background
