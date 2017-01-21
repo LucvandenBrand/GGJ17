@@ -8,6 +8,8 @@ public class AudioImageImporter : MonoBehaviour {
     [SerializeField] private string audioFileName;
     [SerializeField] private float audioLength;
     [SerializeField] private int samplesPerSecond;
+    [SerializeField] private float intensityDecreaser;
+    [SerializeField] private float intensityMultiplier;
     Texture2D freqArr;
 
     // Use this for initialization
@@ -21,7 +23,7 @@ public class AudioImageImporter : MonoBehaviour {
         //UnityEngine.Debug.Log("Starting analysis");
         Process process = new Process();
 
-        process.StartInfo.FileName = @"sox\sox";
+        process.StartInfo.FileName = @"sox";
         process.StartInfo.WorkingDirectory = Application.dataPath;
         process.StartInfo.Arguments = audioFileName + @" -n spectrogram -r -m -x " + SampleFromTime(audioLength);
         process.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
@@ -78,7 +80,14 @@ public class AudioImageImporter : MonoBehaviour {
         {
             result += colum[i].grayscale;
         }
-        // UnityEngine.Debug.Log(result / colum.Length);
-        return result/colum.Length;
+        //UnityEngine.Debug.Log(result / colum.Length);
+
+        float intensity = (result/colum.Length - intensityDecreaser);
+        if (intensity < 0)
+        {
+            intensity = 0;
+        }
+
+        return intensity * intensityMultiplier;
     }
 }

@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Control : MonoBehaviour
 {
+    public AudioSource audioSource;
+    public AudioImageImporter aii;
 
     private string leftStickHorName = "HorizontalLeftStick";
 
@@ -23,6 +26,8 @@ public class Control : MonoBehaviour
 
     private Rigidbody2D rigidbodyCurrent;
 
+    private float curIntensity;
+
     // Use this for initialization
     private void Start()
     {
@@ -35,10 +40,9 @@ public class Control : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
     {
         AssignInput();
-
         float independentSpeed = movementSpeed * Time.deltaTime;
         float angle = Mathf.Atan2(verInput, horInput);
         float amplitude = Mathf.Sqrt(verInput * verInput + horInput * horInput);
@@ -65,6 +69,4 @@ public class Control : MonoBehaviour
             verInput = Input.GetAxisRaw(rightStickVerName + (playerNumber - 4));
         }
     }
-
-
 }

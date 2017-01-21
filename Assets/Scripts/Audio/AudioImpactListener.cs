@@ -4,4 +4,9 @@ using UnityEngine;
 
 public abstract class AudioImpactListener : MonoBehaviour {
     public abstract void AudioImpact(float speed, float intensity);
+
+    public void Start()
+    {
+        AudioSystemController.GetAudioSystemController().AddAudioImpactListener(this);
+    }
 }
