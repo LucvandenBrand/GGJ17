@@ -13,10 +13,14 @@ public class Enemy : AudioImpactListener
     public float sizeScale = 2;
     [SerializeField]
     protected float destroyAfterSeconds = 5f;
+    [SerializeField]
+    protected float enemySpeed = 1.0f;
 
     public void Start()
     {
         base.Start();
+        speed = enemySpeed;
+        movedirection = -transform.position.normalized;
 
         //destroyAfterSeconds = 5f;
 
