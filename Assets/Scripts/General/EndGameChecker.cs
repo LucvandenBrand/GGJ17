@@ -2,11 +2,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class EndGameChecker : MonoBehaviour {
     [SerializeField]
     private Canvas winScreen;
+    [SerializeField]
+    private QuoteMaker quoteMaker;
     private bool gameOver = false;
 	
 	// Update is called once per frame
@@ -40,6 +43,7 @@ public class EndGameChecker : MonoBehaviour {
             return p1.GetLiveTime().CompareTo(p2.GetLiveTime());
         });
         Canvas screen = Instantiate(winScreen);
+        screen.transform.Find("Quote").GetComponent<Text>().text = quoteMaker.GetQuote();
     }
 
     private void SetLeaderBoardPosition(Player[] players)
