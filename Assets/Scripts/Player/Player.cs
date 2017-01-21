@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
 
     public void OnBecameInvisible()
     {
+        if (!this.isActiveAndEnabled)
+            return;
         lives = Mathf.Max(0, lives - 1);
         GameObject particles = Instantiate(playerDeathParticleSystem, Camera.main.transform);
         particles.transform.position = gameObject.transform.position;
