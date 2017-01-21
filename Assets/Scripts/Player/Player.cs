@@ -20,7 +20,9 @@ public class Player : MonoBehaviour
     // Choose random iris color at start.
     public void Start()
     {
-        transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", Random.ColorHSV());
+        Color irisColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), 1.0f, 0.7f);
+        transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", irisColor);
+        transform.Find("Iris").GetComponent<TrailRenderer>().startColor = irisColor;//.material.SetColor("_Color", irisColor);
     }
 
     public void OnBecameInvisible()
@@ -68,6 +70,8 @@ public class Player : MonoBehaviour
     {
         this.GetComponent<MeshRenderer>().enabled = show;
         foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
+            renderer.enabled = show;
+        foreach (TrailRenderer renderer in this.GetComponentsInChildren<TrailRenderer>())
             renderer.enabled = show;
     }
 
