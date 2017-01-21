@@ -11,8 +11,25 @@ public class Player : MonoBehaviour
     private GameObject playerDeathParticleSystem;
     [SerializeField]
     private int lives = 5;
+    private bool hidden = false;
 
     public void OnBecameInvisible()
+    {
+        if (!hidden)
+            kill();
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (!hidden && coll.gameObject.tag == "Enemy")
+        {
+            this.hidden = true;
+            GameObject.Destroy(coll.gameObject);
+            kill();
+        }
+    }
+
+    public void kill()
     {
         lives = Mathf.Max(0, lives - 1);
         GameObject particles = Instantiate(playerDeathParticleSystem, Camera.main.transform);
@@ -31,6 +48,8 @@ public class Player : MonoBehaviour
     public void ShowPlayer(bool show)
     {
         this.GetComponent<MeshRenderer>().enabled = show;
+        foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
+            renderer.enabled = show;
         this.GetComponent<CircleCollider2D>().enabled = show;
     }
 
@@ -42,5 +61,6 @@ public class Player : MonoBehaviour
                                      camera.transform.position.y, transform.position.z);
         gameObject.transform.position = newPos;
         ShowPlayer(true);
+        this.hidden = false;
     }
 }
