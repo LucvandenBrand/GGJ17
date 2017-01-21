@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     private int lives = 5;
     private bool hidden = false;
 
+    // Choose random iris color at start.
     public void Start()
     {
         transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", Random.ColorHSV());
@@ -58,7 +59,6 @@ public class Player : MonoBehaviour
         this.GetComponent<MeshRenderer>().enabled = show;
         foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
             renderer.enabled = show;
-        //this.GetComponent<CircleCollider2D>().enabled = show;
     }
 
     IEnumerator Respawn(float spawnDelay)
