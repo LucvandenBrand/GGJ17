@@ -8,19 +8,27 @@ public class Enemy : AudioImpactListener
     public Vector3 movedirection;
     [HideInInspector]
     public float speed;
-    private float curIntensity = 0;
+    protected float curIntensity = 0;
     [HideInInspector]
     public float sizeScale = 2;
+    [SerializeField]
+    protected float destroyAfterSeconds = 5f;
 
     public void Start()
     {
         base.Start();
+
+        //destroyAfterSeconds = 5f;
+
+        gameObject.AddComponent<DestroyAfter>().destroyAfter = destroyAfterSeconds;
     }
 
     public override void AudioImpact(float speed, float intensity)
     {
         this.curIntensity = intensity;
+
         this.ScaleBody(intensity);
+        
     }
 
     public void ScaleBody(float scale)

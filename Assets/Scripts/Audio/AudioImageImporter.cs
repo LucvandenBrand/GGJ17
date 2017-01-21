@@ -12,12 +12,6 @@ public class AudioImageImporter : MonoBehaviour {
     [SerializeField] private float intensityMultiplier;
     Texture2D freqArr;
 
-    // Use this for initialization
-    public void Start () {
-        /*CreateAudioPNG();
-        LoadAudioPNG();*/
-    }
-
     public void ProcessAudioFile(string audioFileName, float audioLength)
     {
         this.audioFileName = audioFileName;
@@ -34,7 +28,7 @@ public class AudioImageImporter : MonoBehaviour {
 
         process.StartInfo.FileName = @"sox\sox.exe";
         process.StartInfo.WorkingDirectory = Application.dataPath;
-        process.StartInfo.Arguments = audioFileName + @" -n spectrogram -r -m -x " + SampleFromTime(audioLength);
+        process.StartInfo.Arguments = "\""+ audioFileName + "\" -n spectrogram -r -m -x " + SampleFromTime(audioLength);
         process.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
         process.StartInfo.UseShellExecute = false;
         process.StartInfo.RedirectStandardOutput = true;
