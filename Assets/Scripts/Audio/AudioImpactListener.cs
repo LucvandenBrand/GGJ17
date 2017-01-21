@@ -9,4 +9,9 @@ public abstract class AudioImpactListener : MonoBehaviour {
     {
         AudioSystemController.GetAudioSystemController().AddAudioImpactListener(this);
     }
+
+    void OnDestroy()
+    {
+        AudioSystemController.GetAudioSystemController().RemoveAudioImpactListener(this);
+    }
 }

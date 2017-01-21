@@ -8,13 +8,33 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float respawnDelay = 5f;
     [SerializeField]
+    private float respawnInvincibilityDuration = 2f;
+    [SerializeField]
     private GameObject playerDeathParticleSystem;
     [SerializeField]
     private int lives = 5;
+    private bool hidden = false;
+
+    // Choose random iris color at start.
+    public void Start()
+    {
+        transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", Random.ColorHSV());
+    }
 
     public void OnBecameInvisible()
     {
-        kill();
+        if (!hidden)
+            kill();
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (!hidden && coll.gameObject.tag == "Enemy")
+        {
+            this.hidden = true;
+            GameObject.Destroy(coll.gameObject);
+            kill();
+        }
     }
 
     public void kill()
@@ -31,6 +51,7 @@ public class Player : MonoBehaviour
             StartCoroutine("Respawn", respawnDelay);
         particles.GetComponent<ParticleSystemRenderer>().material.mainTexture = Resources.Load("Textures/Lives/" + particle) as Texture;
         ShowPlayer(false);
+        EnableCollider(false);
     }
 
     public void ShowPlayer(bool show)
@@ -38,7 +59,6 @@ public class Player : MonoBehaviour
         this.GetComponent<MeshRenderer>().enabled = show;
         foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
             renderer.enabled = show;
-        this.GetComponent<CircleCollider2D>().enabled = show;
     }
 
     IEnumerator Respawn(float spawnDelay)
@@ -49,5 +69,14 @@ public class Player : MonoBehaviour
                                      camera.transform.position.y, transform.position.z);
         gameObject.transform.position = newPos;
         ShowPlayer(true);
+        this.hidden = false;
+
+        yield return new WaitForSeconds(respawnInvincibilityDuration);
+        EnableCollider(true);
+    }
+
+    public void EnableCollider(bool toggle)
+    {
+        this.GetComponent<CircleCollider2D>().enabled = toggle;
     }
 }
