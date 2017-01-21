@@ -52,6 +52,8 @@ public class Player : MonoBehaviour
         particles.GetComponent<ParticleSystemRenderer>().material.mainTexture = Resources.Load("Textures/Lives/" + particle) as Texture;
         ShowPlayer(false);
         EnableCollider(false);
+
+        FindObjectOfType<AudioReverbFilter>().enabled = true;
     }
 
     public void ShowPlayer(bool show)
@@ -70,6 +72,7 @@ public class Player : MonoBehaviour
         gameObject.transform.position = newPos;
         ShowPlayer(true);
         this.hidden = false;
+        FindObjectOfType<AudioReverbFilter>().enabled = false;
 
         yield return new WaitForSeconds(respawnInvincibilityDuration);
         EnableCollider(true);
