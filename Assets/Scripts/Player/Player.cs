@@ -11,8 +11,8 @@ public class Player : MonoBehaviour
 
     public void OnBecameInvisible()
     {
-        GameObject particles = Instantiate(playerDeathParticleSystem, gameObject.transform);
-        particles.transform.localPosition = Vector3.zero;
+        GameObject particles = Instantiate(playerDeathParticleSystem, Camera.main.transform);
+        particles.transform.position = gameObject.transform.position;
         Vector2 LookAtPoint = new Vector2(Camera.main.transform.position.x, Camera.main.transform.position.y);
         particles.transform.LookAt(LookAtPoint);
 
