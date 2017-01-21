@@ -55,7 +55,7 @@ public class EndGameChecker : MonoBehaviour {
         players[0].transform.position = newPos;
         players[0].transform.localScale = new Vector3(5, 5, 5);
 
-        float stepX = 0.15f;
+        float stepX = 0.11f;
         for (int i = 1; i < players.Length; ++i)
         {
             players[i].ShowPlayer(true);
@@ -63,7 +63,7 @@ public class EndGameChecker : MonoBehaviour {
             newPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width * i * stepX, Screen.height * 0.2f));
             newPos.z = 2;
             players[i].transform.position = newPos;
-            players[i].transform.localScale = new Vector3(5, 5, 5);
+            players[i].transform.localScale = new Vector3(3.5f, 3.5f, 3.5f);
         }
     }
 
