@@ -15,6 +15,11 @@ public class Player : MonoBehaviour
     private int lives = 5;
     private bool hidden = false;
 
+    public void Start()
+    {
+        transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", Random.ColorHSV());
+    }
+
     public void OnBecameInvisible()
     {
         if (!hidden)
