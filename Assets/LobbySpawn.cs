@@ -33,31 +33,35 @@ public class LobbySpawn : MonoBehaviour {
 	void Update ()
     {
 
-        string[] inputNames = Input.GetJoystickNames();
+        string[] inputNames = Input.GetJoystickNames();    // random array of joysticks
 
-        for (int i = 1; i <= inputNames.Length; i++)
+        for (int i = 1; i <= inputNames.Length; i++)        // loop array
         {
             string joystickname = inputNames[i-1];
 
             if (joystickname == "Controller (Xbox 360 Wireless Receiver for Windows)")
             {
-
-                if (!assignedLeftPlayers.Contains(i) && Input.GetAxisRaw(leftTriggerName + i) == 1f)
+                Debug.Log( "This is a XBOX piece of shit" );
+                if (assignedLeftPlayers.Contains(i) == false && Input.GetAxisRaw(leftTriggerName + i) > 0.75f)
                 {
                     GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
 
-                    go.GetComponent<Control>().SetLeftPlayerNumber(i);
+                    go.GetComponent<Control>().SetLeftPlayerNumber(i); 
+
+                    Debug.Log( "New Left" );
 
                     playerCount++;
 
                     assignedLeftPlayers.Add(i);
 
                 }
-                else if (!assignedRightPlayers.Contains(i) && Input.GetAxisRaw(rightTriggerName + i) == 1f)
+                else if (assignedRightPlayers.Contains(i) == false && Input.GetAxisRaw(rightTriggerName + i) > 0.75f)
                 {
                     GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
 
                     go.GetComponent<Control>().SetRightPlayerNumber(i);
+
+                    Debug.Log( "New Right" );
 
                     playerCount++;
                     
