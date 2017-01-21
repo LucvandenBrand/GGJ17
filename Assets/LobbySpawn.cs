@@ -15,8 +15,6 @@ public class LobbySpawn : MonoBehaviour {
 
     private List<int> assignedRightPlayers = new List<int>();
 
-    public int playerCount = 0;
-
     [SerializeField]
     private GameObject playerPrefab;
 
@@ -34,36 +32,39 @@ public class LobbySpawn : MonoBehaviour {
     {
 
         string[] inputNames = Input.GetJoystickNames();
+        int controllerCount = 0;
 
-        for (int i = 1; i <= inputNames.Length; i++)
+        for (int i = 0; i < inputNames.Length; i++)
         {
-            string joystickname = inputNames[i-1];
+            string joystickname = inputNames[i];
 
             if (joystickname == "Controller (Xbox 360 Wireless Receiver for Windows)")
             {
-
-                if (!assignedLeftPlayers.Contains(i) && Input.GetAxisRaw(leftTriggerName + i) == 1f)
-                {
-                    GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
-
-                    go.GetComponent<Control>().SetLeftPlayerNumber(i);
-
-                    playerCount++;
-
-                    assignedLeftPlayers.Add(i);
-
-                }
-                else if (!assignedRightPlayers.Contains(i) && Input.GetAxisRaw(rightTriggerName + i) == 1f)
-                {
-                    GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
-
-                    go.GetComponent<Control>().SetRightPlayerNumber(i);
-
-                    playerCount++;
-                    
-                    assignedRightPlayers.Add(i);
-                }
+                controllerCount++;
             }
+        }
+
+        for (int i = 1; i <= controllerCount; i++)
+        {
+
+            if (!assignedLeftPlayers.Contains(i) && Input.GetAxisRaw(leftTriggerName + i) == 1f)
+            {
+                GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
+
+                go.GetComponent<Control>().SetLeftPlayerNumber(i);
+
+                assignedLeftPlayers.Add(i);
+
+            }
+            else if (!assignedRightPlayers.Contains(i) && Input.GetAxisRaw(rightTriggerName + i) == 1f)
+            {
+                GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
+
+                go.GetComponent<Control>().SetRightPlayerNumber(i);
+                    
+                assignedRightPlayers.Add(i);
+            }
+            
         }
 
         OnButtonStartGame();
