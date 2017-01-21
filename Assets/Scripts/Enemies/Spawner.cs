@@ -6,16 +6,26 @@ public class Spawner : AudioImpactListener {
     private GameObject[] ObjectToSpawn;
     [SerializeField]
     private float length = 25;
-
-    private Camera mainCamera;
+    [SerializeField]
+    private float spawnThreshold = 10;
+    private float intensitySum = 0;
+    [SerializeField]
+    private float maxSpeed = 0.2f;
+    [SerializeField]
+    private float minSpeed = 0.1f;
 
     public override void AudioImpact(float speed, float intensity)
     {
-        SpawnEnemy();
+        intensitySum += intensity;
+        if (intensitySum > spawnThreshold)
+        {
+            intensitySum = 0;
+            SpawnEnemy();
+        }
     }
 
     void SpawnEnemy() {
-        Vector2 cameraVector2D = new Vector2(mainCamera.gameObject.transform.position.x, mainCamera.gameObject.transform.position.y);
+        Vector2 cameraVector2D = new Vector2(Camera.main.gameObject.transform.position.x, Camera.main.gameObject.transform.position.y);
         Vector2 spawnPosition = cameraVector2D + Random.insideUnitCircle.normalized * length;
         GameObject go = Instantiate( ObjectToSpawn[ Random.Range( 0, ObjectToSpawn.Length )], spawnPosition, Quaternion.identity ) as GameObject;
         go.transform.SetParent(this.transform);
@@ -24,6 +34,6 @@ public class Spawner : AudioImpactListener {
         Enemy enemy = go.GetComponent<Enemy>();
 
         enemy.movedirection = -spawnPosition.normalized;
-        enemy.speed = Random.Range( 0.25f, 0.50f );
+        enemy.speed = Random.Range( minSpeed, maxSpeed );
     }
 }

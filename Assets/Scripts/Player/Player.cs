@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
     public void ShowPlayer(bool show)
     {
         this.GetComponent<MeshRenderer>().enabled = show;
+        foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
+            renderer.enabled = show;
         this.GetComponent<CircleCollider2D>().enabled = show;
     }
 
