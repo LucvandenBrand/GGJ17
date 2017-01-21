@@ -5,8 +5,8 @@ using System.Diagnostics;
 using System.IO;
 
 public class AudioImageImporter : MonoBehaviour {
-    [SerializeField] private string audioFileName;
-    [SerializeField] private float audioLength;
+    private string audioFileName;
+    private float audioLength;
     [SerializeField] private int samplesPerSecond;
     [SerializeField] private float intensityDecreaser;
     [SerializeField] private float intensityMultiplier;
@@ -14,6 +14,15 @@ public class AudioImageImporter : MonoBehaviour {
 
     // Use this for initialization
     public void Start () {
+        /*CreateAudioPNG();
+        LoadAudioPNG();*/
+    }
+
+    public void ProcessAudioFile(string audioFileName, float audioLength)
+    {
+        this.audioFileName = audioFileName;
+        this.audioLength = audioLength;
+        UnityEngine.Debug.Log("AudiofileName: " + audioFileName+ "length= "+ audioLength);
         CreateAudioPNG();
         LoadAudioPNG();
     }
