@@ -82,7 +82,7 @@ public class AudioImageImporter : MonoBehaviour {
         }
         //UnityEngine.Debug.Log(result / colum.Length);
 
-        float intensity = (result - intensityDecreaser);
+        float intensity = (result/colum.Length - intensityDecreaser);
         if (intensity < 0)
         {
             intensity = 0;

@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Control : AudioImpactListener
+public class Control : MonoBehaviour
 {
     public AudioSource audioSource;
     public AudioImageImporter aii;
@@ -31,7 +31,6 @@ public class Control : AudioImpactListener
     // Use this for initialization
     private void Start()
     {
-        base.Start();
         rigidbodyCurrent = gameObject.GetComponent<Rigidbody2D>();
     }
 
@@ -44,7 +43,7 @@ public class Control : AudioImpactListener
     private void Update()
     {
         AssignInput();
-        float independentSpeed = movementSpeed * Time.deltaTime * curIntensity;
+        float independentSpeed = movementSpeed * Time.deltaTime;
         float angle = Mathf.Atan2(verInput, horInput);
         float amplitude = Mathf.Sqrt(verInput * verInput + horInput * horInput);
 
@@ -69,10 +68,5 @@ public class Control : AudioImpactListener
 
             verInput = Input.GetAxisRaw(rightStickVerName + (playerNumber - 4));
         }
-    }
-
-    public override void AudioImpact(float speed, float intensity)
-    {
-        curIntensity = intensity;
     }
 }
