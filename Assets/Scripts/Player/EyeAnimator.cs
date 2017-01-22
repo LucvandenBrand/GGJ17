@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 [RequireComponent(typeof(Control))]
 public class EyeAnimator : MonoBehaviour {
     private Control control;
+    //private Quaternion rawRotation;
 
     public void Start()
     {
@@ -20,7 +23,9 @@ public class EyeAnimator : MonoBehaviour {
     {
         float tiltY = 90 - direction.x*45;
         float tiltZ = direction.y*45;
+        Quaternion currentRotation = gameObject.transform.rotation;
         Quaternion target = Quaternion.Euler(0, tiltY, tiltZ);
-        gameObject.transform.rotation = target;
+        
+        gameObject.transform.rotation = Quaternion.Lerp(currentRotation, target, 0.1f);
     }
 }
