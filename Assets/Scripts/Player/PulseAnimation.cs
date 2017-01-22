@@ -21,7 +21,7 @@ public class PulseAnimation : MonoBehaviour {
 	void Update () {
         alpha += Time.deltaTime*pulseSpeed;
         alpha %= Mathf.PI * 2;
-        float scale = Mathf.Max(minScale, Mathf.Cos(alpha) * pulseSize);
+        float scale = minScale + Mathf.Cos(alpha) * pulseSize;
         Vector3 newScale = new Vector3(scale, scale, scale);
         newScale.Scale(originalScale);
         transform.localScale = newScale;
