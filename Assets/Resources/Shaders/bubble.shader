@@ -106,14 +106,15 @@
 
 				// Bubble seeds
 				float pha = sin(float(i)*546.13 + 1.0)*0.5 + 0.5;
-				float siz = pow(sin(float(i)*651.74 + 5.0)*0.5 + 0.5, 4.0);
+				float siz = pow(sin(float(i)*651.74 + 5.0)*0.5 + 0.5, _MusicIntensity);
 				float pox = sin(float(i)*321.55 + 4.1);
 
 				// Bubble size, position and color
-				float rad = 0.1 + 0.5*siz * 4.0 * _MusicIntensity;
+				float rad = 0 + 0.5 * siz * 2.0 * _MusicIntensity;
 				
 
-				float2  pos = float2(pox, -1.0 - rad + (2.0 + 2.0*rad)*fmod(pha + 0.6*_Time.y*(0.2 + 0.8*siz),1.0));
+				//float2  pos = float2(pox, -1.0 - rad + (2.0 + 2.0*rad)*fmod(pha + 0.6*_Time.y * (0.2 + 0.2*siz),1.0));
+				float2  pos = float2(pox, -1.0 - rad + (2.0 + 2.0*rad)*fmod(pha + 0.6 * _Time.y * (0.2 + 0.1 * siz), 1.0));
 				float dis = length(uv - pos);
 				//float3 col = lerp(float3(0.94,0.3,0.0), float3(0.1,0.4,0.8), 0.5 + 0.5*sin(float(i)*1.2 + 1.9));
 				///float3 col = lerp(float3(0.9, 0.9, 0.9), float3(0.1, 0.1, 0.1), 0.5 + 0.5*sin(float(i)*1.2 + 1.9));

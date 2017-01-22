@@ -82,7 +82,9 @@ public class EndGameChecker : MonoBehaviour {
         for (int i = 0; i < players.Length; ++i)
         {
             int score = (int) players[i].GetLiveTime();
-            canvas.transform.Find("ScoreP"+(i+1)).GetComponent<Text>().text = score+" Sec.";
+            int scoreMin = score / 60;
+            int scoreSec = score % 60;
+            canvas.transform.Find("ScoreP" + (i + 1)).GetComponent<Text>().text = scoreMin + ":" + scoreSec;//score+" Sec.";
         }
     }
 

@@ -28,7 +28,7 @@ public class EnemySine : Enemy
 
         //if (this.curIntensity >= intensityTreshold)
         //{
-        //this.ScaleBody(0.5f - 1.0f * intensity);
+        this.ScaleBody(Mathf.Clamp(intensity,0.1f, 0.2f));
         //}
 
     }
