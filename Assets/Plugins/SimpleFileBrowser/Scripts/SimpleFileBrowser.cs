@@ -93,9 +93,6 @@ public class SimpleFileBrowser : MonoBehaviour
 	private Dropdown filtersDropdown;
 
 	[SerializeField]
-	private Toggle showHiddenFilesToggle;
-
-	[SerializeField]
 	private Text submitButtonText;
 
 	[Header( "Icons" )]
@@ -514,11 +511,6 @@ public class SimpleFileBrowser : MonoBehaviour
 		RefreshFiles();
 	}
 
-	public void OnShowHiddenFilesToggleChanged()
-	{
-		RefreshFiles();
-	}
-
 	public void OnQuickLinkSelected( SimpleFileBrowserQuickLink quickLink )
 	{
 		if( quickLink != null )
@@ -599,7 +591,7 @@ public class SimpleFileBrowser : MonoBehaviour
 
 		activeItemCount = 0;
 
-		if( !showHiddenFilesToggle.isOn )
+		if(true)
 			ignoredFileAttributes |= FileAttributes.Hidden;
 		else
 			ignoredFileAttributes &= ~FileAttributes.Hidden;
