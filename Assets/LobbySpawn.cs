@@ -15,8 +15,6 @@ public class LobbySpawn : MonoBehaviour {
 
     private List<int> assignedRightPlayers = new List<int>();
 
-    public int playerCount = 0;
-
     [SerializeField]
     private GameObject playerPrefab;
 
@@ -33,44 +31,62 @@ public class LobbySpawn : MonoBehaviour {
 	void Update ()
     {
 
-        string[] inputNames = Input.GetJoystickNames();    // random array of joysticks
+        string[] inputNames = Input.GetJoystickNames();
+        int controllerCount = 0;
 
-        for (int i = 1; i <= inputNames.Length; i++)        // loop array
+        for (int i = 0; i < inputNames.Length; i++)
         {
-            string joystickname = inputNames[i-1];
+            string joystickname = inputNames[i];
 
             if (joystickname == "Controller (Xbox 360 Wireless Receiver for Windows)")
             {
-                Debug.Log( "This is a XBOX piece of shit" );
-                if (assignedLeftPlayers.Contains(i) == false && Input.GetAxisRaw(leftTriggerName + i) > 0.75f)
-                {
-                    GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
-
-                    go.GetComponent<Control>().SetLeftPlayerNumber(i); 
-
-                    Debug.Log( "New Left" );
-
-                    playerCount++;
-
-                    assignedLeftPlayers.Add(i);
-
-                }
-                else if (assignedRightPlayers.Contains(i) == false && Input.GetAxisRaw(rightTriggerName + i) > 0.75f)
-                {
-                    GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
-
-                    go.GetComponent<Control>().SetRightPlayerNumber(i);
-
-                    Debug.Log( "New Right" );
-
-                    playerCount++;
-                    
-                    assignedRightPlayers.Add(i);
-                }
+                controllerCount++;
             }
         }
 
+        for (int i = 1; i <= controllerCount; i++)
+        {
+
+            if (!assignedLeftPlayers.Contains(i) && Input.GetAxisRaw(leftTriggerName + i) == 1f)
+            {
+                GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
+
+                go.GetComponent<Control>().SetLeftPlayerNumber(i);
+
+                assignedLeftPlayers.Add(i);
+
+            }
+            else if (!assignedRightPlayers.Contains(i) && Input.GetAxisRaw(rightTriggerName + i) == 1f)
+            {
+                GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
+
+                go.GetComponent<Control>().SetRightPlayerNumber(i);
+                    
+                assignedRightPlayers.Add(i);
+            }
+            
+        }
+
+        
+
         OnButtonStartGame();
+    }
+
+    private void LateUpdate()
+    {
+        clampPlayers();
+    }
+
+    void clampPlayers()
+    {
+        
+        for(int index = 0; index < players.transform.childCount; ++index)
+        {
+            var pos = Camera.main.WorldToViewportPoint(players.transform.GetChild(index).transform.position);
+            pos.x = Mathf.Clamp(pos.x, 0.1f, 0.9f);
+            pos.y = Mathf.Clamp(pos.y, 0.1f, 0.9f);
+            players.transform.GetChild(index).transform.position = Camera.main.ViewportToWorldPoint(pos);
+        }
     }
 
     void OnButtonStartGame()

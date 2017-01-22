@@ -28,11 +28,15 @@ public class AudioImageImporter : MonoBehaviour {
         //UnityEngine.Debug.Log("Starting analysis");
         Process process = new Process();
 
-        process.StartInfo.FileName = @"sox\sox.exe";
+        /*if (Application.platform == RuntimePlatform.WindowsEditor)
+            process.StartInfo.FileName = @"sox\sox.exe";
+        else*/
+            process.StartInfo.FileName = @"EyeCantHear_Data\sox\sox.exe";
         process.StartInfo.WorkingDirectory = Application.dataPath;
         process.StartInfo.Arguments = "\""+ audioFileName + "\" -n spectrogram -r -m -x " + SampleFromTime(audioLength);
         process.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
         process.StartInfo.UseShellExecute = false;
+        //process.StartInfo.CreateNoWindow = true;
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.RedirectStandardError = true;
         process.Start();
@@ -71,7 +75,12 @@ public class AudioImageImporter : MonoBehaviour {
 
     private void LoadAudioPNG()
     {
-        byte[] image = System.IO.File.ReadAllBytes(@"Assets\spectrogram.png");
+        byte[] image;
+#if UNITYEDITOR
+        image = File.ReadAllBytes(@"Assets\spectrogram.png");
+#else
+        image = File.ReadAllBytes(@"EyeCantHear_Data\spectrogram.png");
+#endif
         freqArr = new Texture2D(2, 2);
         freqArr.LoadImage(image);
         //UnityEngine.Debug.Log(freqArr.GetPixels(0, 0, 1, freqArr.height).Length);
