@@ -31,7 +31,11 @@ public class AudioImageImporter : MonoBehaviour {
         /*if (Application.platform == RuntimePlatform.WindowsEditor)
             process.StartInfo.FileName = @"sox\sox.exe";
         else*/
-            process.StartInfo.FileName = @"EyeCantHear_Data\sox\sox.exe";
+#if UNITY_EDITOR
+        process.StartInfo.FileName = @"sox\sox.exe";
+#else
+        process.StartInfo.FileName = @"EyeCantHear_Data\sox\sox.exe";
+#endif
         process.StartInfo.WorkingDirectory = Application.dataPath;
         process.StartInfo.Arguments = "\""+ audioFileName + "\" -n spectrogram -r -m -x " + SampleFromTime(audioLength);
         process.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
@@ -76,7 +80,7 @@ public class AudioImageImporter : MonoBehaviour {
     private void LoadAudioPNG()
     {
         byte[] image;
-#if UNITYEDITOR
+#if UNITY_EDITOR
         image = File.ReadAllBytes(@"Assets\spectrogram.png");
 #else
         image = File.ReadAllBytes(@"EyeCantHear_Data\spectrogram.png");
