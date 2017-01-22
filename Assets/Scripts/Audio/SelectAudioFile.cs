@@ -15,7 +15,10 @@ public class SelectAudioFile : MonoBehaviour {
     public void SelectAudio() {
         string audioPath = SelectFileWindow.OpenWindow();
         if (audioPath.Equals( "" )) {
-            audioPath = SelectFileWindow.OpenWindow();
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject player in players)
+                player.transform.SetParent(gameObject.transform);
+            SceneManager.LoadScene(1, LoadSceneMode.Single);
         }
         LoadAudioFile(audioPath);
     }
