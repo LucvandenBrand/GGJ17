@@ -10,8 +10,6 @@ public class EndGameChecker : MonoBehaviour {
     private Canvas winScreen;
     [SerializeField]
     private QuoteMaker quoteMaker;
-    [SerializeField]
-    private List<Text> scoreTexts;
     private bool gameOver = false;
 
     // Update is called once per frame
@@ -75,7 +73,8 @@ public class EndGameChecker : MonoBehaviour {
     {
         for (int i = 0; i < players.Length; ++i)
         {
-            scoreTexts[i].text = players[i].GetLiveTime().ToString()+"S";
+            int score = (int) players[i].GetLiveTime();
+            canvas.transform.Find("ScoreP"+(i+1)).GetComponent<Text>().text = score+" Sec.";
         }
     }
 
