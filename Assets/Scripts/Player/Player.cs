@@ -105,8 +105,13 @@ public class Player : MonoBehaviour
         ShowPlayer(true);
         this.hidden = false;
         FindObjectOfType<AudioReverbFilter>().enabled = false;
-
+        GetComponent<Renderer>().material.color = Color.red;
+        PulseAnimation anim = gameObject.AddComponent<PulseAnimation>();
+        anim.SetFrequency(10);
+        anim.SetMinScale(0.5f);
         yield return new WaitForSeconds(respawnInvincibilityDuration);
+        GetComponent<Renderer>().material.color = Color.white;
+        Destroy(anim);
         EnableCollider(true);
     }
 
