@@ -19,18 +19,18 @@ public class Player : MonoBehaviour
     private float liveTime = 0;
     private static int playerCount = 0;
     private int playerIndex = 0;
-    private Color playercColor;
+    private Color playerColor;
 
 
     // Choose random iris color at start.
     public void Start()
     {
         playerIndex = playerCount;
-        ++playerCount;
+        playerCount = (playerCount + 1) % 8;
 
-        playercColor = Color.HSVToRGB(playerIndex / 8.0f, 1.0f, 0.7f);
-        transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", playercColor);
-        transform.Find("Iris").GetComponent<TrailRenderer>().startColor = playercColor;//.material.SetColor("_Color", irisColor);
+        playerColor = Color.HSVToRGB(playerIndex / 8.0f, 1.0f, 0.7f);
+        transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", playerColor);
+        transform.Find("Iris").GetComponent<TrailRenderer>().startColor = playerColor;//.material.SetColor("_Color", irisColor);
     }
 
     public void Update()
@@ -65,7 +65,8 @@ public class Player : MonoBehaviour
     {
         lives = Mathf.Max(0, lives - 1);
         GameObject particles = Instantiate(playerDeathParticleSystem, Camera.main.transform);
-        particles.GetComponent<Renderer>().material.SetColor("_Color", playercColor);
+        particles.GetComponent<Renderer>().material.SetColor("_EmissionColor", playerColor);
+        particles.GetComponent<Renderer>().material.SetColor("_Color", playerColor);
 
         particles.transform.position = gameObject.transform.position;
         Vector2 LookAtPoint = new Vector2(Camera.main.transform.position.x, Camera.main.transform.position.y);
