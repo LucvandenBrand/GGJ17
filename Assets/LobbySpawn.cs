@@ -11,92 +11,82 @@ public class LobbySpawn : MonoBehaviour {
 
     private string rightTriggerName = "RightTrigger";
 
-    private List<int> assignedLeftPlayers = new List<int>();
+    private List<int> assignedLeftPlayerIndexies = new List<int>();
 
-    private List<int> assignedRightPlayers = new List<int>();
+    private List<int> assignedRightPlayerIndexies = new List<int>();
 
     [SerializeField]
     private GameObject playerPrefab;
 
     [SerializeField]
-    private GameObject players;
+    private GameObject playerSpawn;
 
-    // Use this for initialization
-    void Start()
-    {
-        
+
+
+    void Start() {
+
     }
-	
-	// Update is called once per frame
-	void Update ()
-    {
+
+
+    void Update() {
 
         string[] inputNames = Input.GetJoystickNames();
         int controllerCount = 0;
 
-        for (int i = 0; i < inputNames.Length; i++)
-        {
+        for (int i = 0; i < inputNames.Length; i++) {
             string joystickname = inputNames[i];
 
-            if (joystickname == "Controller (Xbox 360 Wireless Receiver for Windows)")
-            {
+            if (joystickname == "Controller (Xbox 360 Wireless Receiver for Windows)") {
                 controllerCount++;
             }
         }
 
-        for (int i = 1; i <= controllerCount; i++)
-        {
+        for (int i = 1; i <= controllerCount; i++) {
 
-            if (!assignedLeftPlayers.Contains(i) && Input.GetAxisRaw(leftTriggerName + i) == 1f)
-            {
-                GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
+            if (assignedLeftPlayerIndexies.Contains(i) == false  &&  Input.GetAxisRaw(leftTriggerName + i) > 0.75f) {
+                GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
 
                 go.GetComponent<Control>().SetLeftPlayerNumber(i);
 
-                assignedLeftPlayers.Add(i);
+                assignedLeftPlayerIndexies.Add(i);
 
-            }
-            else if (!assignedRightPlayers.Contains(i) && Input.GetAxisRaw(rightTriggerName + i) == 1f)
-            {
-                GameObject go = Instantiate(playerPrefab, players.gameObject.transform);
+            } else if (assignedRightPlayerIndexies.Contains(i) == false  &&  Input.GetAxisRaw(rightTriggerName + i) > 0.75f) {
+                GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
 
                 go.GetComponent<Control>().SetRightPlayerNumber(i);
-                    
-                assignedRightPlayers.Add(i);
-            }
-            
-        }
 
-        
+                assignedRightPlayerIndexies.Add(i);
+            }
+
+        }
 
         OnButtonStartGame();
     }
 
-    private void LateUpdate()
-    {
+
+    private void LateUpdate() {
         clampPlayers();
     }
 
-    void clampPlayers()
-    {
-        
-        for(int index = 0; index < players.transform.childCount; ++index)
-        {
-            var pos = Camera.main.WorldToViewportPoint(players.transform.GetChild(index).transform.position);
+
+    void clampPlayers() {
+
+        for (int index = 0; index < playerSpawn.transform.childCount; ++index) {
+            var pos = Camera.main.WorldToViewportPoint(playerSpawn.transform.GetChild(index).transform.position);
             pos.x = Mathf.Clamp(pos.x, 0.1f, 0.9f);
             pos.y = Mathf.Clamp(pos.y, 0.1f, 0.9f);
-            players.transform.GetChild(index).transform.position = Camera.main.ViewportToWorldPoint(pos);
+            playerSpawn.transform.GetChild(index).transform.position = Camera.main.ViewportToWorldPoint(pos);
         }
     }
 
-    void OnButtonStartGame()
-    {
-        if (Input.GetButtonDown("StartButtonJ1") == true)
-        {
 
-            Object.DontDestroyOnLoad(players);
+    void OnButtonStartGame() {
+        if (Input.GetButtonDown("StartButtonJ1") == true) {
+            if (assignedLeftPlayerIndexies.Count + assignedRightPlayerIndexies.Count > 0) {
+                Object.DontDestroyOnLoad(playerSpawn);
 
-            SceneManager.LoadScene(2,LoadSceneMode.Single);
+                SceneManager.LoadScene(2, LoadSceneMode.Single);
+            }
         }
     }
 }
