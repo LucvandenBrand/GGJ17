@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class IricButton : MonoBehaviour {
-
+    public AudioClip whoomSound;
 
     public void OnMouseOver()
     {
@@ -14,6 +14,8 @@ public class IricButton : MonoBehaviour {
             anim.SetFrequency(10);
             anim.SetAmplitude(0.2f);
             anim.SetMinScale(3f);
+            AudioSource source = GetComponent<AudioSource>();
+            source.PlayOneShot(whoomSound, 2.0f);
             StartCoroutine("StartGame", 0.5f);
         }
     }
