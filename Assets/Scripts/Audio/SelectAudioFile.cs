@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class SelectAudioFile : MonoBehaviour {
     public AudioSource audioSource;
     public AudioImageImporter aii;
+    public Canvas loadScreen;
     private AudioClip resultClip;
 
 
@@ -19,6 +20,7 @@ public class SelectAudioFile : MonoBehaviour {
 
     IEnumerator ShowLoadDialogCoroutine() {
         yield return StartCoroutine(SimpleFileBrowser.WaitForLoadDialog(false, null, "Load File", "Load"));
+        Instantiate(loadScreen);
         LoadAudioFile(SimpleFileBrowser.Result);
     }
 
