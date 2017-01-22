@@ -19,7 +19,7 @@ public class EnemyBeat : Enemy
 
         //if (this.curIntensity >= intensityTreshold)
         //{
-            this.ScaleBody(0.5f - 1.0f * intensity);
+            this.ScaleBody(0.5f - intensity);
         //}
 
     }

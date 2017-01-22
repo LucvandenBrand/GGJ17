@@ -12,7 +12,7 @@ public enum AudioImpactType {
 
 
 /* Controls all audio elements. */
-public class AudioSystemController : MonoBehaviour {
+public class AudioSystemController : ScriptableObject {
     private static AudioSystemController instance = null;
 
     private List< KeyValuePair<AudioImpactListener, AudioImpactType> > audioImpactListeners = new List< KeyValuePair<AudioImpactListener, AudioImpactType> >();
@@ -20,8 +20,6 @@ public class AudioSystemController : MonoBehaviour {
     public AudioSource audioSource;
     public AudioImageImporter aii;
     private float alpha = 0;
-
-
 
     public void Awake() {
         instance = this;
@@ -31,13 +29,13 @@ public class AudioSystemController : MonoBehaviour {
         for (int i = 0; i < audioImpactListeners.Count; i++) {
             switch (audioImpactListeners[i].Value) {
                 case AudioImpactType.INTENSITY:
-                    audioImpactListeners[i].Key.AudioImpact(GetIntensity());
+                    audioImpactListeners[i].Key.AudioImpact( GetIntensity() );
                     break;
                 case AudioImpactType.SPEED:
                     throw new NotImplementedException();
                     break;
                 case AudioImpactType.BASE_INTENSITY:
-                    throw new NotImplementedException();
+                    audioImpactListeners[i].Key.AudioImpact( GetBaseIntensity() ); 
                     break;
             }
             

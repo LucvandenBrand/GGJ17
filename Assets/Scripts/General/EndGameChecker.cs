@@ -45,40 +45,84 @@ public class EndGameChecker : MonoBehaviour {
         SetScores(screen, players);
     }
 
+    private int GetWinner(Player[] players)
+    {
+        int winner = 0;
+        float maxLiveTime = 0;
+        for (int i=0; i<players.Length; ++i)
+        {
+            if (players[i].GetLiveTime() > maxLiveTime)
+            {
+                maxLiveTime = players[i].GetLiveTime();
+                winner = i;
+            }
+        }
+        return winner;
+    }
+
     private void SetLeaderBoardPosition(Player[] players)
     {
-        Array.Sort(players, delegate (Player p1, Player p2) {
-            return 1- p1.GetLiveTime().CompareTo(p2.GetLiveTime());
-        });
-        players[0].ShowPlayer(true);
-        players[0].GetComponent<Control>().movementSpeed = 0;
+        if (players.Length == 0) {
+            Debug.LogWarning("No Players exists on the leader board");
+            return;
+        }
+
+        int winner = GetWinner(players);
+        players[winner].ShowPlayer(true);
+        players[winner].GetComponent<Control>().movementSpeed = 0;
         Vector3 newPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width * 0.11f, Screen.height * 0.7f));
         newPos.z = 2;
-        players[0].transform.position = newPos;
-        players[0].transform.localScale = new Vector3(5, 5, 5);
+        players[winner].transform.position = newPos;
+        players[winner].transform.localScale = new Vector3(5, 5, 5);
 
         float stepX = 0.11f;
-        for (int i = 1; i < players.Length; ++i)
+        int stepCount = 1;
+        for (int i = 0; i < players.Length; ++i)
         {
-            players[i].ShowPlayer(true);
-            players[i].GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
-            newPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width * i * stepX, Screen.height * 0.2f));
-            newPos.z = 2;
-            players[i].transform.position = newPos;
-            players[i].transform.localScale = new Vector3(3.5f, 3.5f, 3.5f);
+            if (i != winner)
+            {
+                players[i].ShowPlayer(true);
+                players[i].GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+                newPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width * stepCount * stepX, Screen.height * 0.2f));
+                newPos.z = 2;
+                players[i].transform.position = newPos;
+                players[i].transform.localScale = new Vector3(3.5f, 3.5f, 3.5f);
+                stepCount++;
+            }
         }
     }
 
     private void SetScores(Canvas canvas, Player[] players)
     {
-        Array.Sort(players, delegate (Player p1, Player p2) {
-            return 1- p1.GetLiveTime().CompareTo(p2.GetLiveTime());
-        });
+        int winner = GetWinner(players);
+        int stepCount = 2;
         for (int i = 0; i < players.Length; ++i)
         {
-            int score = (int) players[i].GetLiveTime();
-            canvas.transform.Find("ScoreP"+(i+1)).GetComponent<Text>().text = score+" Sec.";
+            string objName = "ScoreP";
+            if (i == winner)
+            {
+                objName += 1;
+            } else
+            {
+                objName += stepCount++;
+            }
+            string secondsStr = formatSeconds((int)players[i].GetLiveTime());
+            canvas.transform.Find(objName).GetComponent<Text>().text = secondsStr;
         }
+    }
+
+    private string formatSeconds(int rawSeconds)
+    {
+
+        int minutes = rawSeconds / 60;
+        int seconds = rawSeconds % 60;
+        string secondsStr = "";
+        secondsStr += minutes + ":";
+        if (seconds < 10)
+        {
+            secondsStr += "0";
+        }
+        return secondsStr += seconds;
     }
 
     // Delete players and reenter lobby.
