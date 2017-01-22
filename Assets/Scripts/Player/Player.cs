@@ -17,11 +17,16 @@ public class Player : MonoBehaviour
     private int lives = 5;
     private bool hidden = false;
     private float liveTime = 0;
+    private static int playerCount = 0;
+    private int playerIndex = 0;
 
     // Choose random iris color at start.
     public void Start()
     {
-        Color irisColor = Color.HSVToRGB(Random.Range(0.0f, 1.0f), 1.0f, 0.7f);
+        playerIndex = playerCount;
+        ++playerCount;
+
+        Color irisColor = Color.HSVToRGB(playerIndex / 8.0f, 1.0f, 0.7f);
         transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", irisColor);
         transform.Find("Iris").GetComponent<TrailRenderer>().startColor = irisColor;//.material.SetColor("_Color", irisColor);
     }
@@ -70,7 +75,15 @@ public class Player : MonoBehaviour
         ShowPlayer(false);
         EnableCollider(false);
 
-        FindObjectOfType<AudioReverbFilter>().enabled = true;
+        if (lives < 0)
+        {
+            FindObjectOfType<AudioReverbFilter>().enabled = false;
+        }
+        else if (lives >=1 && lives <= 5)
+        {
+            FindObjectOfType<AudioReverbFilter>().enabled = true;
+        }
+        
     }
 
     public void ShowPlayer(bool show)
