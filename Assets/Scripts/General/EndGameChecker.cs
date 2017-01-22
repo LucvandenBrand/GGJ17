@@ -48,7 +48,7 @@ public class EndGameChecker : MonoBehaviour {
     private void SetLeaderBoardPosition(Player[] players)
     {
         Array.Sort(players, delegate (Player p1, Player p2) {
-            return 1 - p1.GetLiveTime().CompareTo(p2.GetLiveTime());
+            return 1- p1.GetLiveTime().CompareTo(p2.GetLiveTime());
         });
         players[0].ShowPlayer(true);
         players[0].GetComponent<Control>().movementSpeed = 0;
@@ -71,6 +71,9 @@ public class EndGameChecker : MonoBehaviour {
 
     private void SetScores(Canvas canvas, Player[] players)
     {
+        Array.Sort(players, delegate (Player p1, Player p2) {
+            return 1- p1.GetLiveTime().CompareTo(p2.GetLiveTime());
+        });
         for (int i = 0; i < players.Length; ++i)
         {
             int score = (int) players[i].GetLiveTime();
