@@ -24,8 +24,6 @@ public class Spawner : AudioImpactListener {
 
     void SpawnEnemy() {
         int maxSpawnableObjectTypeIndex = Mathf.CeilToInt((GetAudioSystemController().audioSource.time / GetAudioSystemController().audioSource.clip.length) * ObjectToSpawn.Length);
-        Debug.Log(maxSpawnableObjectTypeIndex);
-
 
         Vector2 cameraVector2D = new Vector2(Camera.main.gameObject.transform.position.x, Camera.main.gameObject.transform.position.y);
         Vector2 spawnPosition = cameraVector2D + Random.insideUnitCircle.normalized * length;

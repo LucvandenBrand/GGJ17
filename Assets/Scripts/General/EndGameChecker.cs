@@ -76,11 +76,23 @@ public class EndGameChecker : MonoBehaviour {
         });
         for (int i = 0; i < players.Length; ++i)
         {
-            int score = (int) players[i].GetLiveTime();
-            int scoreMin = score / 60;
-            int scoreSec = score % 60;
-            canvas.transform.Find("ScoreP" + (i + 1)).GetComponent<Text>().text = scoreMin + ":" + scoreSec;//score+" Sec.";
+            string secondsStr = formatSeconds((int)players[i].GetLiveTime());
+            canvas.transform.Find("ScoreP" + (i + 1)).GetComponent<Text>().text = secondsStr;//score+" Sec.";
         }
+    }
+
+    private string formatSeconds(int rawSeconds)
+    {
+
+        int minutes = rawSeconds / 60;
+        int seconds = rawSeconds % 60;
+        string secondsStr = "";
+        secondsStr += minutes + ":";
+        if (seconds < 10)
+        {
+            secondsStr += "0";
+        }
+        return secondsStr += seconds;
     }
 
     // Delete players and reenter lobby.
