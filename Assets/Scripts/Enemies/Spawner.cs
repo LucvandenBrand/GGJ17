@@ -23,9 +23,13 @@ public class Spawner : AudioImpactListener {
     }
 
     void SpawnEnemy() {
+        int maxSpawnableObjectTypeIndex = Mathf.CeilToInt((GetAudioSystemController().audioSource.time / GetAudioSystemController().audioSource.clip.length) * ObjectToSpawn.Length);
+        Debug.Log(maxSpawnableObjectTypeIndex);
+
+
         Vector2 cameraVector2D = new Vector2(Camera.main.gameObject.transform.position.x, Camera.main.gameObject.transform.position.y);
         Vector2 spawnPosition = cameraVector2D + Random.insideUnitCircle.normalized * length;
-        GameObject go = Instantiate( ObjectToSpawn[ Random.Range( 0, ObjectToSpawn.Length )], spawnPosition, Quaternion.FromToRotation(spawnPosition.normalized, Vector3.zero), this.transform ) as GameObject;
+        GameObject go = Instantiate( ObjectToSpawn[ Random.Range( 0, maxSpawnableObjectTypeIndex)], spawnPosition, Quaternion.FromToRotation(spawnPosition.normalized, Vector3.zero), this.transform ) as GameObject;
         // go.transform.SetParent(this.transform);
 
         //go.AddComponent<DestroyAfter>().destroyAfter = 5;
