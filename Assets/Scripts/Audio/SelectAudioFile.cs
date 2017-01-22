@@ -7,26 +7,26 @@ public class SelectAudioFile : MonoBehaviour {
     public AudioSource audioSource;
     public AudioImageImporter aii;
     private AudioClip resultClip;
-    // Use this for initialization
+
+
+
     void Start() {
-        SelectAudio();
+        SimpleFileBrowser.SetFilters(".mp3", ".wav");
+        SimpleFileBrowser.SetDefaultFilter(".mp3");
+        SimpleFileBrowser.AddQuickLink(null, "Users", "C:\\Users");
+        StartCoroutine(ShowLoadDialogCoroutine());
     }
 
-    public void SelectAudio() {
-        string audioPath = SelectFileWindow.OpenWindow();
-        if (audioPath.Equals( "" )) {
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            foreach (GameObject player in players)
-                player.transform.SetParent(gameObject.transform);
-            SceneManager.LoadScene(1, LoadSceneMode.Single);
-        }
-        LoadAudioFile(audioPath);
+    IEnumerator ShowLoadDialogCoroutine() {
+        yield return StartCoroutine(SimpleFileBrowser.WaitForLoadDialog(false, null, "Load File", "Load"));
+        LoadAudioFile(SimpleFileBrowser.Result);
     }
+
 
     public void LoadAudioFile( string audioPath ) {
         StartCoroutine(LoadAudio(audioPath));
-
     }
+
 
     IEnumerator LoadAudio( string audioPath ) {
         string url = "file:///" + audioPath;
@@ -35,8 +35,8 @@ public class SelectAudioFile : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
 
-        resultClip = (audioPath.EndsWith(".mp3")) ? NAudioPlayer.FromMp3Data(www.bytes) : www.audioClip; 
-        
+        resultClip = (audioPath.EndsWith(".mp3")) ? NAudioPlayer.FromMp3Data(www.bytes) : www.audioClip;
+
         audioSource.clip = resultClip;
         StartAudioImageImporter(audioPath);
         yield return null;
@@ -46,6 +46,7 @@ public class SelectAudioFile : MonoBehaviour {
         Debug.Log("size = " + resultClip.length);
         aii.ProcessAudioFile(audioPath, resultClip.length);
     }
+
 
     //deze wegdoen als er muziek niet meer automatisch gestart moet worden
     void Update() {

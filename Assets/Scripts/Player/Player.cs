@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     private float liveTime = 0;
     private static int playerCount = 0;
     private int playerIndex = 0;
+    private Color playercColor;
+
 
     // Choose random iris color at start.
     public void Start()
@@ -26,9 +28,9 @@ public class Player : MonoBehaviour
         playerIndex = playerCount;
         ++playerCount;
 
-        Color irisColor = Color.HSVToRGB(playerIndex / 8.0f, 1.0f, 0.7f);
-        transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", irisColor);
-        transform.Find("Iris").GetComponent<TrailRenderer>().startColor = irisColor;//.material.SetColor("_Color", irisColor);
+        playercColor = Color.HSVToRGB(playerIndex / 8.0f, 1.0f, 0.7f);
+        transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", playercColor);
+        transform.Find("Iris").GetComponent<TrailRenderer>().startColor = playercColor;//.material.SetColor("_Color", irisColor);
     }
 
     public void Update()
@@ -63,26 +65,27 @@ public class Player : MonoBehaviour
     {
         lives = Mathf.Max(0, lives - 1);
         GameObject particles = Instantiate(playerDeathParticleSystem, Camera.main.transform);
+        particles.GetComponent<Renderer>().material.SetColor("_Color", playercColor);
+
         particles.transform.position = gameObject.transform.position;
         Vector2 LookAtPoint = new Vector2(Camera.main.transform.position.x, Camera.main.transform.position.y);
         particles.transform.LookAt(LookAtPoint);
         string particle = lives.ToString();
+
         if (lives < 1)
             particle = "skull";
         else
             StartCoroutine("Respawn", respawnDelay);
+
         particles.GetComponent<ParticleSystemRenderer>().material.mainTexture = Resources.Load("Textures/Lives/" + particle) as Texture;
         ShowPlayer(false);
         EnableCollider(false);
 
         if (lives < 0)
-        {
             FindObjectOfType<AudioReverbFilter>().enabled = false;
-        }
         else if (lives >=1 && lives <= 5)
-        {
             FindObjectOfType<AudioReverbFilter>().enabled = true;
-        }
+        
         
     }
 
@@ -108,7 +111,8 @@ public class Player : MonoBehaviour
         GetComponent<Renderer>().material.color = Color.red;
         PulseAnimation anim = gameObject.AddComponent<PulseAnimation>();
         anim.SetFrequency(10);
-        anim.SetMinScale(0.5f);
+        anim.SetMinScale(0.9f);
+        anim.SetAmplitude(0.2f);
         yield return new WaitForSeconds(respawnInvincibilityDuration);
         GetComponent<Renderer>().material.color = Color.white;
         Destroy(anim);

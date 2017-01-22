@@ -9,7 +9,7 @@ public class VisibleScoreCounter : AudioImpactListener {
     // Use this for initialization
     new void Start () {
         base.Start();
-        GetAudioSystemController().AddAudioImpactListener(this); 
+//        GetAudioSystemController().AddAudioImpactListener(this); 
 	}
 	
 	// Update is called once per frame
@@ -19,9 +19,11 @@ public class VisibleScoreCounter : AudioImpactListener {
 
     public override void AudioImpact(float reguestedCallbackValue)
     {
-        int rawSeconds = Mathf.FloorToInt(GetAudioSystemController().audioSource.time);
-        int totalDuration = Mathf.FloorToInt(GetAudioSystemController().audioSource.clip.length);
-        gameObject.transform.GetComponent<Text>().text = formatSeconds(rawSeconds) + " / " + formatSeconds(totalDuration);
+        if (GetAudioSystemController().audioSource.clip) {
+            int rawSeconds = Mathf.FloorToInt(GetAudioSystemController().audioSource.time);
+            int totalDuration = Mathf.FloorToInt(GetAudioSystemController().audioSource.clip.length);
+            gameObject.transform.GetComponent<Text>().text = formatSeconds(rawSeconds) + " / " + formatSeconds(totalDuration);
+        }
     }
 
     private string formatSeconds(int rawSeconds)
