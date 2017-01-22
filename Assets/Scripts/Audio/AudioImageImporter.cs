@@ -33,6 +33,7 @@ public class AudioImageImporter : MonoBehaviour {
         process.StartInfo.Arguments = "\""+ audioFileName + "\" -n spectrogram -r -m -x " + SampleFromTime(audioLength);
         process.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
         process.StartInfo.UseShellExecute = false;
+        process.StartInfo.CreateNoWindow = true;
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.RedirectStandardError = true;
         process.Start();

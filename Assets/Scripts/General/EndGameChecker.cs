@@ -11,9 +11,9 @@ public class EndGameChecker : MonoBehaviour {
     [SerializeField]
     private QuoteMaker quoteMaker;
     private bool gameOver = false;
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
         Player[] players = FindObjectsOfType<Player>();
         int liveCount = 0;
         foreach (Player player in players)
@@ -22,7 +22,7 @@ public class EndGameChecker : MonoBehaviour {
         }
 
         // Check for gameover.
-        if (liveCount == 0 )
+        if (liveCount == 0)
         {
             OnButtonStartGame();
             if (!gameOver)
@@ -39,14 +39,16 @@ public class EndGameChecker : MonoBehaviour {
     // Show the leaderboard.
     private void ShowLeaderBoard()
     {
+        Player[] players = FindObjectsOfType<Player>();
         Canvas screen = Instantiate(winScreen);
         screen.transform.Find("Quote").GetComponent<Text>().text = quoteMaker.GetQuote();
+        SetScores(screen, players);
     }
 
     private void SetLeaderBoardPosition(Player[] players)
     {
         Array.Sort(players, delegate (Player p1, Player p2) {
-            return 1-p1.GetLiveTime().CompareTo(p2.GetLiveTime());
+            return 1- p1.GetLiveTime().CompareTo(p2.GetLiveTime());
         });
         players[0].ShowPlayer(true);
         players[0].GetComponent<Control>().movementSpeed = 0;
@@ -67,7 +69,17 @@ public class EndGameChecker : MonoBehaviour {
         }
     }
 
-
+    private void SetScores(Canvas canvas, Player[] players)
+    {
+        Array.Sort(players, delegate (Player p1, Player p2) {
+            return 1- p1.GetLiveTime().CompareTo(p2.GetLiveTime());
+        });
+        for (int i = 0; i < players.Length; ++i)
+        {
+            int score = (int) players[i].GetLiveTime();
+            canvas.transform.Find("ScoreP"+(i+1)).GetComponent<Text>().text = score+" Sec.";
+        }
+    }
 
     // Delete players and reenter lobby.
     private void ReturnToLobby()
