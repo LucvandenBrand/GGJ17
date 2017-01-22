@@ -12,7 +12,7 @@ public enum AudioImpactType {
 
 
 /* Controls all audio elements. */
-public class AudioSystemController : MonoBehaviour {
+public class AudioSystemController : ScriptableObject {
     private static AudioSystemController instance = null;
 
     private List< KeyValuePair<AudioImpactListener, AudioImpactType> > audioImpactListeners = new List< KeyValuePair<AudioImpactListener, AudioImpactType> >();
@@ -20,8 +20,6 @@ public class AudioSystemController : MonoBehaviour {
     public AudioSource audioSource;
     public AudioImageImporter aii;
     private float alpha = 0;
-
-
 
     public void Awake() {
         instance = this;

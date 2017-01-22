@@ -7,7 +7,6 @@ public abstract class AudioImpactListener : MonoBehaviour {
     public abstract void AudioImpact( float reguestedCallbackValue );
 
     public void Start() {
-        Debug.Log( "Ik Start" );
         GetAudioSystemController().AddAudioImpactListener(this);
     }
 
