@@ -37,20 +37,3 @@ public class BloomImpactListener : AudioImpactListener {
 
 
 
-[System.Serializable]
-public class FloatRange {
-    [Range(0,1)]
-    public float min;
-    [Range(0,1)]
-    public float max;
-    
-
-    public FloatRange(float min, float max) {
-        this.min = min;
-        this.max = max;
-    }
-
-    public float GetRandomBetween() {
-        return Random.Range(min, max);
-    }
-}

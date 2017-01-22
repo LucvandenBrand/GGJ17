@@ -47,6 +47,11 @@ public class EndGameChecker : MonoBehaviour {
 
     private void SetLeaderBoardPosition(Player[] players)
     {
+        if (players.Length == 0) {
+            Debug.LogWarning("No Players exists on the leader board");
+            return;
+        }
+
         Array.Sort(players, delegate (Player p1, Player p2) {
             return 1- p1.GetLiveTime().CompareTo(p2.GetLiveTime());
         });

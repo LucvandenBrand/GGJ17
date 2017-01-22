@@ -31,13 +31,13 @@ public class AudioSystemController : MonoBehaviour {
         for (int i = 0; i < audioImpactListeners.Count; i++) {
             switch (audioImpactListeners[i].Value) {
                 case AudioImpactType.INTENSITY:
-                    audioImpactListeners[i].Key.AudioImpact(GetIntensity());
+                    audioImpactListeners[i].Key.AudioImpact( GetIntensity() );
                     break;
                 case AudioImpactType.SPEED:
                     throw new NotImplementedException();
                     break;
                 case AudioImpactType.BASE_INTENSITY:
-                    throw new NotImplementedException();
+                    audioImpactListeners[i].Key.AudioImpact( GetBaseIntensity() ); 
                     break;
             }
             
