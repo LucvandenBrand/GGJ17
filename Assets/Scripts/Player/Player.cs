@@ -111,7 +111,8 @@ public class Player : MonoBehaviour
         GetComponent<Renderer>().material.color = Color.red;
         PulseAnimation anim = gameObject.AddComponent<PulseAnimation>();
         anim.SetFrequency(10);
-        anim.SetMinScale(0.5f);
+        anim.SetMinScale(0.9f);
+        anim.SetAmplitude(0.2f);
         yield return new WaitForSeconds(respawnInvincibilityDuration);
         GetComponent<Renderer>().material.color = Color.white;
         Destroy(anim);
