@@ -13,9 +13,9 @@ public class SelectAudioFile : MonoBehaviour {
 
     void Start() {
         #if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
-            SimpleFileBrowser.SetFilters(".wav", ".ogg");
+            SimpleFileBrowser.SetFilters(".wav", ".ogg", ".aiff");
         #else
-            SimpleFileBrowser.SetFilters(".mp3", ".wav", ".ogg");
+            SimpleFileBrowser.SetFilters(".mp3", ".wav", ".ogg", ".aiff");
         #endif
 
         SimpleFileBrowser.SetDefaultFilter(".mp3");
