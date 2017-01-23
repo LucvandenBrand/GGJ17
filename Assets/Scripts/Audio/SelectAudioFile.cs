@@ -12,7 +12,7 @@ public class SelectAudioFile : MonoBehaviour {
 
 
     void Start() {
-        SimpleFileBrowser.SetFilters(".mp3", ".wav");
+        SimpleFileBrowser.SetFilters(".mp3", ".wav", ".ogg");
         SimpleFileBrowser.SetDefaultFilter(".mp3");
         SimpleFileBrowser.AddQuickLink(null, "Users", "C:\\Users");
         StartCoroutine(ShowLoadDialogCoroutine());
