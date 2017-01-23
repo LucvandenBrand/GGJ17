@@ -95,11 +95,11 @@ public class AudioImageImporter : MonoBehaviour {
     private void LoadAudioPNG()
     {
         byte[] image;
-#if UNITY_EDITOR
-        image = File.ReadAllBytes(Path.Combine(@"Assets", "spectrogram.png"));
-#else
-        image = File.ReadAllBytes(Path.Combine(@"EyeCantHear_Data", "spectrogram.png"));
-#endif
+        #if UNITY_EDITOR
+            image = File.ReadAllBytes(Path.Combine("Assets","spectrogram.png"));
+        #else
+            image = File.ReadAllBytes(Path.Combine("EyeCantHear_Data", "spectrogram.png"));
+        #endif
         freqArr = new Texture2D(2, 2);
         freqArr.LoadImage(image);
         //UnityEngine.Debug.Log(freqArr.GetPixels(0, 0, 1, freqArr.height).Length);
