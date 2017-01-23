@@ -26,9 +26,10 @@ public class Player : MonoBehaviour
     public void Start()
     {
         playerIndex = playerCount;
-        playerCount = (playerCount + 1) % 10;
+        playerCount = (playerCount + 1) % 12;
+        float secondRoundOffset = playerIndex > 8 ? 0.0f : 0.05f; // ninth player hue in-between playerIndex 0's hue and playerIndex 1's hue.
 
-        playerColor = Color.HSVToRGB(playerIndex / 10.0f, 1.0f, 0.7f);
+        playerColor = Color.HSVToRGB(playerIndex / 8.0f + secondRoundOffset, 1.0f, 0.7f);
         transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", playerColor);
         transform.Find("Iris").GetComponent<TrailRenderer>().startColor = playerColor;//.material.SetColor("_Color", irisColor);
     }
