@@ -86,7 +86,7 @@ public class Player : MonoBehaviour
         if (lives < 0)
             FindObjectOfType<AudioReverbFilter>().reverbLevel = -10000;
         else if (lives >=1 && lives <= 5)
-            FindObjectOfType<AudioReverbFilter>().reverbLevel = 1774;
+            FindObjectOfType<AudioReverbFilter>().reverbLevel = 1500;
         
         
     }

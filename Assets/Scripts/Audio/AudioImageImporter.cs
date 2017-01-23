@@ -109,6 +109,9 @@ public class AudioImageImporter : MonoBehaviour {
     {
         try
         {
+            if (AudioSystemController.GetAudioSystemController().audioSource.clip == null)
+                return 0;
+
             if (freqArr == null) 
                 LoadAudioPNG();
 

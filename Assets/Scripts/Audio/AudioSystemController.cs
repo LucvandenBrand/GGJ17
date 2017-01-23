@@ -46,6 +46,25 @@ public class AudioSystemController : ScriptableObject {
         }
     }
 
+
+    private void LateUpdate() {
+        if (audioSource.clip == null)
+            clampPlayers();
+    }
+
+
+    void clampPlayers() {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        for (int index = 0; index < players.Length; ++index) {
+            var pos = Camera.main.WorldToViewportPoint(players[index].transform.position);
+            pos.x = Mathf.Clamp(pos.x, 0.1f, 0.9f);
+            pos.y = Mathf.Clamp(pos.y, 0.1f, 0.9f);
+           players[index].transform.position = Camera.main.ViewportToWorldPoint(pos);
+        }
+    }
+
+
     float GetSpeed() {
         throw new NotImplementedException();
         return 5;
