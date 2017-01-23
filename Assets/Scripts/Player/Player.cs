@@ -26,9 +26,9 @@ public class Player : MonoBehaviour
     public void Start()
     {
         playerIndex = playerCount;
-        playerCount = (playerCount + 1) % 8;
+        playerCount = (playerCount + 1) % 10;
 
-        playerColor = Color.HSVToRGB(playerIndex / 8.0f, 1.0f, 0.7f);
+        playerColor = Color.HSVToRGB(playerIndex / 10.0f, 1.0f, 0.7f);
         transform.Find("Iris").GetComponent<Renderer>().material.SetColor("_Color", playerColor);
         transform.Find("Iris").GetComponent<TrailRenderer>().startColor = playerColor;//.material.SetColor("_Color", irisColor);
     }
