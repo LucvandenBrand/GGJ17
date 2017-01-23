@@ -23,6 +23,20 @@ public class AudioImageImporter : MonoBehaviour {
         LoadAudioPNG();
     }
 
+    private string SoxFilename()
+        {
+            #if UNITY_EDITOR_LINUX
+              return Path.Combine("sox", "sox_linux");
+            #elif UNITY_EDITOR_WINDOWS
+              return Path.Combine("sox", "sox.exe");
+            #elif UNITY_STANDALONE_LINUX
+              return Path.Combine("EyeCantHear_Data", Path.Combine("sox","sox_linux"));
+            #else
+              return Path.Combine("sox", "sox.exe");
+            #endif
+
+        }
+
     private void CreateAudioPNG()
     {
         //UnityEngine.Debug.Log("Starting analysis");
@@ -31,11 +45,12 @@ public class AudioImageImporter : MonoBehaviour {
         /*if (Application.platform == RuntimePlatform.WindowsEditor)
             process.StartInfo.FileName = @"sox\sox.exe";
         else*/
-#if UNITY_EDITOR
-        process.StartInfo.FileName = @"sox\sox.exe";
-#else
-        process.StartInfo.FileName = @"EyeCantHear_Data\sox\sox.exe";
-#endif
+// #if UNITY_EDITOR
+//         process.StartInfo.FileName = @"sox\sox.exe";
+// #else
+//         process.StartInfo.FileName = @"EyeCantHear_Data\sox\sox.exe";
+// #endif
+        process.StartInfo.FileName = SoxFilename();
         process.StartInfo.WorkingDirectory = Application.dataPath;
         process.StartInfo.Arguments = "\""+ audioFileName + "\" -n spectrogram -r -m -x " + SampleFromTime(audioLength);
         process.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
@@ -81,9 +96,9 @@ public class AudioImageImporter : MonoBehaviour {
     {
         byte[] image;
 #if UNITY_EDITOR
-        image = File.ReadAllBytes(@"Assets\spectrogram.png");
+        image = File.ReadAllBytes(Path.Combine(@"Assets", "spectrogram.png"));
 #else
-        image = File.ReadAllBytes(@"EyeCantHear_Data\spectrogram.png");
+        image = File.ReadAllBytes(Path.Combine(@"EyeCantHear_Data", "spectrogram.png"));
 #endif
         freqArr = new Texture2D(2, 2);
         freqArr.LoadImage(image);
