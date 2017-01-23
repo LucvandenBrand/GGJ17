@@ -138,7 +138,7 @@ public class EndGameChecker : MonoBehaviour {
 
     void OnButtonStartGame()
     {
-        if (Input.GetButtonDown("StartButtonJ1") == true)
+        if (Input.GetButtonDown("StartButtonJ1") || Input.GetKeyDown(KeyCode.Return))
             ReturnToLobby();
     }
 }
