@@ -26,6 +26,10 @@ public class AudioSystemController : ScriptableObject {
     }
 
     void Update() {
+        if(audioSource == null)
+        {
+            return;
+        }
         for (int i = 0; i < audioImpactListeners.Count; i++) {
             switch (audioImpactListeners[i].Value) {
                 case AudioImpactType.INTENSITY:

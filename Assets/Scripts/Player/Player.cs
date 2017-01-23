@@ -84,9 +84,9 @@ public class Player : MonoBehaviour
         EnableCollider(false);
 
         if (lives < 0)
-            FindObjectOfType<AudioReverbFilter>().enabled = false;
+            FindObjectOfType<AudioReverbFilter>().reverbLevel = 0;
         else if (lives >=1 && lives <= 5)
-            FindObjectOfType<AudioReverbFilter>().enabled = true;
+            FindObjectOfType<AudioReverbFilter>().reverbLevel = 1774;
         
         
     }
@@ -109,7 +109,7 @@ public class Player : MonoBehaviour
         gameObject.transform.position = newPos;
         ShowPlayer(true);
         this.hidden = false;
-        FindObjectOfType<AudioReverbFilter>().enabled = false;
+        FindObjectOfType<AudioReverbFilter>().reverbLevel = 0;
         GetComponent<Renderer>().material.color = Color.red;
         PulseAnimation anim = gameObject.AddComponent<PulseAnimation>();
         anim.SetFrequency(10);

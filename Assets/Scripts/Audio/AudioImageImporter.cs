@@ -107,40 +107,55 @@ public class AudioImageImporter : MonoBehaviour {
 
     public float GetIntensity(float time)
     {
-        if (freqArr == null) 
-            LoadAudioPNG();
-        
-        float result = 0;
-        Color[] colum = freqArr.GetPixels(SampleFromTime(time), 0, 1, freqArr.height);
-        for (int i=0; i < colum.Length; i++)
-            result += colum[i].grayscale;
-        
-        //UnityEngine.Debug.Log(result / colum.Length);
+        try
+        {
+            if (freqArr == null) 
+                LoadAudioPNG();
 
-        float intensity = (result/colum.Length - intensityDecreaser);
-        if (intensity < 0)
-            intensity = 0;
+            float result = 0;
+            Color[] colum = freqArr.GetPixels(SampleFromTime(time), 0, 1, freqArr.height);
+            for (int i=0; i < colum.Length; i++)
+                result += colum[i].grayscale;
 
-        return intensity * intensityMultiplier;
+            //UnityEngine.Debug.Log(result / colum.Length);
+
+            float intensity = (result/colum.Length - intensityDecreaser);
+            if (intensity < 0)
+                intensity = 0;
+
+            return intensity * intensityMultiplier;
+        }
+        catch(FileNotFoundException)
+        {
+            return 0;
+        };
     }
 
     public float GetBaseIntensity(float time)
     {
-        if (freqArr == null) 
-            LoadAudioPNG();
-        
-        float result = 0;
-        Color[] colum = freqArr.GetPixels( SampleFromTime(time), 0, 1, freqArr.height);
+        try
+        {
+          if (freqArr == null) 
+              LoadAudioPNG();
 
-        for (int i=0; i < colum.Length / 2; i++)
-            result += colum[i].grayscale - colum[(colum.Length / 2) + i].grayscale;
-        
-        //UnityEngine.Debug.Log(result / colum.Length);
+          float result = 0;
+          Color[] colum = freqArr.GetPixels( SampleFromTime(time), 0, 1, freqArr.height);
 
-        float intensity = (result/colum.Length - intensityDecreaser);
-        if (intensity < 0)
-            intensity = 0;
+          for (int i=0; i < colum.Length / 2; i++)
+              result += colum[i].grayscale - colum[(colum.Length / 2) + i].grayscale;
 
-        return intensity * intensityMultiplier;
+          //UnityEngine.Debug.Log(result / colum.Length);
+
+          float intensity = (result/colum.Length - intensityDecreaser);
+          if (intensity < 0)
+              intensity = 0;
+
+          return intensity * intensityMultiplier;
+        }
+        catch(FileNotFoundException)
+        {
+            return 0;
+        };
+
     }
 }
