@@ -50,6 +50,8 @@ public class LobbySpawn : MonoBehaviour {
 
     private bool arrowKeysPlayerConnected = false;
     private bool wasdKeysPlayerConnected = false;
+    private bool ijklKeysPlayerConnected = false;
+    private bool numpadKeysPlayerConnected = false;
 
     void Start() {
 
@@ -297,6 +299,20 @@ public class LobbySpawn : MonoBehaviour {
             go.GetComponent<Control>().SetWASDKeysPlayer();
             wasdKeysPlayerConnected = true;
         }
+        
+        if( Input.GetKeyDown(KeyCode.I) && !ijklKeysPlayerConnected)
+        {
+            GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
+            go.GetComponent<Control>().SetIJKLKeysPlayer();
+            ijklKeysPlayerConnected = true;
+        }
+        
+        if( Input.GetKeyDown(KeyCode.Keypad8) && !numpadKeysPlayerConnected)
+        {
+            GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
+            go.GetComponent<Control>().SetNumpadKeysPlayer();
+            numpadKeysPlayerConnected = true;
+        }
 
         OnButtonStartGame();
     }
@@ -320,7 +336,7 @@ public class LobbySpawn : MonoBehaviour {
 
     void OnButtonStartGame() {
         if (Input.GetButtonDown("StartButtonJ1") == true || Input.GetKeyDown(KeyCode.Return) == true) {
-            if (assignedLeftPlayerIndexies.Count + assignedRightPlayerIndexies.Count > 0 || arrowKeysPlayerConnected || wasdKeysPlayerConnected) {
+            if (assignedLeftPlayerIndexies.Count + assignedRightPlayerIndexies.Count > 0 || arrowKeysPlayerConnected || wasdKeysPlayerConnected || ijklKeysPlayerConnected || numpadKeysPlayerConnected) {
                 Object.DontDestroyOnLoad(playerSpawn);
 
                 SceneManager.LoadScene(2, LoadSceneMode.Single);
