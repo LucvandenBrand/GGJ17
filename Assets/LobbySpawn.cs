@@ -48,7 +48,8 @@ public class LobbySpawn : MonoBehaviour {
     private bool j3RightConnected = false;
     private bool j4RightConnected = false;
 
-
+    private bool arrowKeysPlayerConnected = false;
+    private bool wasdKeysPlayerConnected = false;
 
     void Start() {
 
@@ -281,8 +282,23 @@ public class LobbySpawn : MonoBehaviour {
 
             }
             */
+            // GameObject arrow_keys_player = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
 
-            OnButtonStartGame();
+        if( Input.GetKeyDown(KeyCode.UpArrow) && !arrowKeysPlayerConnected)
+        {
+            GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
+            go.GetComponent<Control>().SetArrowKeysPlayer();
+            arrowKeysPlayerConnected = true;
+        }
+        
+        if( Input.GetKeyDown(KeyCode.W) && !wasdKeysPlayerConnected)
+        {
+            GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
+            go.GetComponent<Control>().SetWASDKeysPlayer();
+            wasdKeysPlayerConnected = true;
+        }
+
+        OnButtonStartGame();
     }
 
 
@@ -303,8 +319,8 @@ public class LobbySpawn : MonoBehaviour {
 
 
     void OnButtonStartGame() {
-        if (Input.GetButtonDown("StartButtonJ1") == true) {
-            if (assignedLeftPlayerIndexies.Count + assignedRightPlayerIndexies.Count > 0) {
+        if (Input.GetButtonDown("StartButtonJ1") == true || Input.GetKeyDown(KeyCode.Return) == true) {
+            if (assignedLeftPlayerIndexies.Count + assignedRightPlayerIndexies.Count > 0 || arrowKeysPlayerConnected || wasdKeysPlayerConnected) {
                 Object.DontDestroyOnLoad(playerSpawn);
 
                 SceneManager.LoadScene(2, LoadSceneMode.Single);

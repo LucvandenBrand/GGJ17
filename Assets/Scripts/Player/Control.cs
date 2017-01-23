@@ -28,6 +28,11 @@ public class Control : MonoBehaviour
     [SerializeField]
     private int playerNumberRight = 0;
 
+    [SerializeField]
+    private bool arrowKeysPlayer = false;
+    [SerializeField]
+    private bool wasdKeysPlayer = false;
+
     private Rigidbody2D rigidbodyCurrent;
 
 
@@ -46,6 +51,15 @@ public class Control : MonoBehaviour
     {
         playerNumberRight = playerNr;
     }
+    public void SetArrowKeysPlayer()
+    {
+        arrowKeysPlayer = true;
+    }
+
+    public void SetWASDKeysPlayer()
+    {
+        wasdKeysPlayer = true;
+    }
 
     // Update is called once per frame
     private void Update()
@@ -63,7 +77,28 @@ public class Control : MonoBehaviour
 
     private void AssignInput()
     {
-        if (playerNumberLeft > 0 && playerNumberLeft <= 4)
+        if (arrowKeysPlayer || wasdKeysPlayer)
+        {
+            int arrUp, arrDown, arrLeft, arrRight;
+            if(arrowKeysPlayer)
+            {
+                arrUp = Input.GetKey(KeyCode.UpArrow) ? 1 : 0;
+                arrDown = Input.GetKey(KeyCode.DownArrow) ? 1 : 0;
+                arrLeft = Input.GetKey(KeyCode.LeftArrow) ? 1 : 0;
+                arrRight = Input.GetKey(KeyCode.RightArrow) ? 1 : 0;
+            }
+            else
+            {
+                arrUp = Input.GetKey(KeyCode.W) ? 1 : 0;
+                arrDown = Input.GetKey(KeyCode.S) ? 1 : 0;
+                arrLeft = Input.GetKey(KeyCode.A) ? 1 : 0;
+                arrRight = Input.GetKey(KeyCode.D) ? 1 : 0;
+            }
+            verInput = arrUp - arrDown;
+            horInput = arrRight - arrLeft;
+        }
+
+        else if (playerNumberLeft > 0 && playerNumberLeft <= 4)
         {
             horInput = Input.GetAxisRaw(leftStickHorName + playerNumberLeft);
 
