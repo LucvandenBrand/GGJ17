@@ -47,7 +47,7 @@ public class SelectAudioFile : MonoBehaviour {
         #elif UNITY_STANDALONE_LINUX
             return Path.Combine("EyeCantHear_Data", Path.Combine("sox","sox_linux"));
         #else
-            return Path.Combine("sox", "sox.exe");
+            return Path.Combine("EyeCantHear_Data", Path.Combine("sox", "sox.exe"));
         #endif
 
     }
