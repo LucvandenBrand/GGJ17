@@ -122,4 +122,12 @@ public class SelectAudioFile : MonoBehaviour {
         #endif
         yield return null;
     }
+
+    void Update() {
+        if (audioSource.clip != null) {
+            if (!audioSource.isPlaying && audioSource.clip.isReadyToPlay)
+                audioSource.Play();
+        }
+    }
+
 }
