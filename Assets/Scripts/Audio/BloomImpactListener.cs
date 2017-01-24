@@ -1,17 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityStandardAssets.ImageEffects;
 
 [RequireComponent( typeof(Camera) )]
 [RequireComponent( typeof(BloomOptimized) )]
 public class BloomImpactListener : AudioImpactListener {
 
-    [Header("these values")]
-    [SerializeField]
-    private FloatRange audioIntancity;
-
-    [Header("are remap to these values")]
     [SerializeField]
     private FloatRange bloomIntancity;
 
@@ -24,9 +17,9 @@ public class BloomImpactListener : AudioImpactListener {
     }
 
     public override void AudioImpact( float intensity ) {
-        intensity = Mathf.Clamp( intensity,  audioIntancity.min, audioIntancity.max);
-        float tmp = Remap(intensity, 0, 1,  audioIntancity.min, audioIntancity.max);
-        bloomOptimized.intensity = Remap(tmp, audioIntancity.min, audioIntancity.max,  bloomIntancity.min, bloomIntancity.max);
+        intensity = Mathf.Clamp( intensity,  0, 1);
+//        float tmp = Remap(intensity, 0, 1,  audioIntancity.min, audioIntancity.max);
+        bloomOptimized.intensity = Remap(intensity, 0, 1,  bloomIntancity.min, bloomIntancity.max);
     }
 
     private float Remap (float value, float from1, float to1, float from2, float to2) {
