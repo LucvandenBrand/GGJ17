@@ -86,9 +86,6 @@ public class SelectAudioFile : MonoBehaviour {
         standardOutput.Append(process.StandardOutput.ReadToEnd());
         standardError.Append(process.StandardError.ReadToEnd());
 
-
-        //process.WaitForExit();
-        //UnityEngine.Debug.Log(standardOutput);
         if (standardError.ToString() != "")
         {
             UnityEngine.Debug.Log(standardError);
@@ -101,12 +98,10 @@ public class SelectAudioFile : MonoBehaviour {
 
     IEnumerator LoadAudio( string audioPath ) {
 
-        #if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
             if (!audioPath.EndsWith(".wav"))
             {
                 audioPath = convertSoundToWav(audioPath);
             }
-        #endif
 
         string url = "file:///" + audioPath;
         WWW www = new WWW(url);
@@ -114,12 +109,7 @@ public class SelectAudioFile : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
 
-        #if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
             audioSource.clip = resultClip = www.audioClip;
-        #else
-            // resultClip = (audioPath.EndsWith(".mp3")) ? NAudioPlayer.FromMp3Data(www.bytes) : www.audioClip;
-            audioSource.clip = resultClip = NAudioPlayer.FromMp3Data( www.bytes ); //resultClip;
-        #endif
         yield return null;
     }
 
