@@ -13,7 +13,7 @@ public class DestroyAfter : MonoBehaviour {
 
     void Update() {
         if (startTime + destroyAfter <= Time.time) {
-            Destroy(this.gameObject, 0.01f);
+            Destroy(this.gameObject);
         }
     }
 

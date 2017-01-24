@@ -12,17 +12,24 @@ public enum AudioImpactType {
 
 
 /* Controls all audio elements. */
-public class AudioSystemController : ScriptableObject {
+[RequireComponent( typeof(AudioSource) )]
+public class AudioSystemController : MonoBehaviour {
     private static AudioSystemController instance = null;
 
     private List< KeyValuePair<AudioImpactListener, AudioImpactType> > audioImpactListeners = new List< KeyValuePair<AudioImpactListener, AudioImpactType> >();
-//    private Dictionary<AudioImpactListener, AudioImpactType> dictionary = new Dictionary<AudioImpactListener, AudioImpactType>();
     public AudioSource audioSource;
-    public AudioImageImporter aii;
     private float alpha = 0;
+
+    [SerializeField]
+    private AnimationCurve intancityCurve = AnimationCurve.Linear( 0, 0.5f, 1, 1);
+    [SerializeField]
+    [Range(20, 40)]
+    private int intancityMultiplier = 30;
+
 
     public void Awake() {
         instance = this;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update() {
@@ -71,12 +78,41 @@ public class AudioSystemController : ScriptableObject {
     }
 
     private float GetBaseIntensity() {
-        return aii.GetBaseIntensity(audioSource.time);
+        if (audioSource.clip == null) 
+            return 0.02f;
+
+        float[] spectrum = new float[128];
+        float result = 0;
+
+        AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
+
+        for (int i = 1; i < (spectrum.Length / 2f) - 1; i++) {
+            result += spectrum[i] *2;
+
+            //Debug.DrawLine(new Vector3(i/64F, 0, -1), new Vector3(i/64F, spectrum[i]*5, -1), Color.yellow);
+        }
+
+        return result / 128f * intancityCurve.Evaluate(  Remap(audioSource.time, 0, audioSource.clip.length, 0, 1) ) * intancityMultiplier;
     }
 
+    
     private float GetIntensity() {
-        return aii.GetIntensity(audioSource.time);
+        if (audioSource.clip == null) 
+            return 0.02f;
+
+        float[] spectrum = new float[128];
+        float result = 0;
+
+        AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
+
+        for (int i = 1; i < spectrum.Length - 1; i++) {
+            result += spectrum[i];
+            Debug.DrawLine(new Vector3(i/64F, 0, -1), new Vector3(i/64F, spectrum[i]*5, -1), Color.yellow);
+        }
+
+        return result / 128f * intancityCurve.Evaluate(  Remap(audioSource.time, 0, audioSource.clip.length, 0, 1) ) * intancityMultiplier;
     }
+
 
     public void AddAudioImpactListener( AudioImpactListener ail, AudioImpactType impactType = AudioImpactType.INTENSITY ) {
         audioImpactListeners.Add( new KeyValuePair<AudioImpactListener, AudioImpactType>(ail, impactType) );
@@ -86,12 +122,17 @@ public class AudioSystemController : ScriptableObject {
         audioImpactListeners.Remove( new KeyValuePair<AudioImpactListener, AudioImpactType>(ail, impactType) );
     }
 
+
     public static AudioSystemController GetAudioSystemController() {
         if (instance) 
             return instance;
         else {
             Debug.LogWarning( "!!! this singleton had no instance, a new Object is Generated - AudioSystemController::GetAudioSystemController " );
-            return new AudioSystemController();
+            return new GameObject().AddComponent<AudioSystemController>().gameObject.GetComponent<AudioSystemController>();  // wow
         }
+    }
+
+    private float Remap (float value, float from1, float to1, float from2, float to2) {
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 }
