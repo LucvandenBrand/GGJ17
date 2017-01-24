@@ -65,16 +65,16 @@ public class AudioSystemController : ScriptableObject {
     }
 
 
-    float GetSpeed() {
+    private float GetSpeed() {
         throw new NotImplementedException();
         return 5;
     }
 
-    float GetBaseIntensity() {
+    private float GetBaseIntensity() {
         return aii.GetBaseIntensity(audioSource.time);
     }
 
-    float GetIntensity() {
+    private float GetIntensity() {
         return aii.GetIntensity(audioSource.time);
     }
 

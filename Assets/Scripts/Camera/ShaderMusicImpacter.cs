@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShaderMusicImpacter : AudioImpactListener {
-    private FloatAverage average = new FloatAverage(15);
-    public override void AudioImpact(float intensity)
-    {
-        average.Add(intensity);
+    [Range(1, 20)]
+    private int takeAverageOf = 15;
+    private FloatAverage average;
+    private Material mat;
+
+    void Awake() {
+        mat = GetComponent<Renderer>().material;
+        average = new FloatAverage( takeAverageOf );
     }
 
-    public void Update()
-    {
-        GetComponent<Renderer>().material.SetFloat("_MusicIntensity", average.GetAverage());
+    public override void AudioImpact( float intensity ) {
+        average.Add(intensity);
+        mat.SetFloat("_MusicIntensity", average.GetAverage());
     }
 }
