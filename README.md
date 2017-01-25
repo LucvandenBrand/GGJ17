@@ -1,8 +1,9 @@
 # GGJ17
-Snappy Cobra - Global Game Jame Game 2017
+Snappy Cobra - Global Game Jam Game 2017.
 
+A trippy rithm game you supply with your own music: it performs a FFT analysis on the sound provided and uses its result to make the enemies dance. Made in [Unity3D](https://unity3d.com).
 
-##images
+##Screenshots
 ![alt tag](https://raw.githubusercontent.com/Lukeslux/GGJ17/master/screenshots/screen_1920x1080_2017-01-24_00-30-40.png)
 ![alt tag](https://raw.githubusercontent.com/Lukeslux/GGJ17/master/screenshots/screen_1920x1080_2017-01-24_00-35-22.png)
 
