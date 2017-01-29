@@ -58,7 +58,7 @@ public class SelectAudioFile : MonoBehaviour {
     /* As we can only stream wav files, this function can convert files to that format. */
     private string convertSoundToWav(string audioPath)
     {
-        string tmpWavPath =Path.Combine(Application.dataPath.Replace("/", "\\"), "tmp.wav");
+        string tmpWavPath =Path.Combine(Application.dataPath/*.Replace("/", "\\")*/, "tmp.wav");
 
         Process process = new Process();
         process.StartInfo.FileName = SoxFilename();

@@ -15,6 +15,14 @@ public class Enemy : AudioImpactListener
     protected float destroyAfterSeconds = 5f;
     [SerializeField]
     protected float enemySpeed = 1.0f;
+    [SerializeField]
+    protected float minScale = 0.1f;
+    [SerializeField]
+    protected float maxScale = 0.7f;
+    [SerializeField]
+    protected float maxSpeed = 0.1f;
+
+
 
     public void Start()
     {
@@ -32,16 +40,18 @@ public class Enemy : AudioImpactListener
         this.curIntensity = intensity;
 
         this.ScaleBody(intensity);
-        
     }
 
     public void ScaleBody(float scale)
     {
-        transform.localScale = new Vector3(scale*sizeScale, scale*sizeScale);
+        scale *= sizeScale;
+        scale = Mathf.Clamp(scale, minScale, maxScale);
+        transform.localScale = new Vector3(scale, scale);
     }
 
     void Update()
     {
-        transform.Translate(movedirection * speed * curIntensity);
+        float clamped_speed = Mathf.Clamp(speed * curIntensity, 0.0f, maxSpeed);
+        transform.Translate(movedirection * clamped_speed);
     }
 }
