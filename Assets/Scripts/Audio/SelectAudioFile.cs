@@ -40,7 +40,7 @@ public class SelectAudioFile : MonoBehaviour {
         StartCoroutine(LoadAudio(SimpleFileBrowser.Result));
     }
 
-    // Download the file to the assets and insert it into the AudioSouce.
+    /* Download the file to the assets and insert it into the AudioSouce. */
     IEnumerator LoadAudio(string audioPath)
     {
         if (!audioPath.EndsWith(".wav"))
@@ -55,9 +55,7 @@ public class SelectAudioFile : MonoBehaviour {
         yield return null;
     }
 
-    /*
-      Only used on Linux right now.
-    */
+    /* As we can only stream wav files, this function can convert files to that format. */
     private string convertSoundToWav(string audioPath)
     {
         string tmpWavPath =Path.Combine(Application.dataPath.Replace("/", "\\"), "tmp.wav");
@@ -72,8 +70,6 @@ public class SelectAudioFile : MonoBehaviour {
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.RedirectStandardError = true;
         process.Start();
-
-        //UnityEngine.Debug.Log("Starting Done");
 
         var standardOutput = new System.Text.StringBuilder();
         var standardError = new System.Text.StringBuilder();
