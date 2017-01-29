@@ -21,10 +21,10 @@ public class AudioSystemController : MonoBehaviour {
     private float alpha = 0;
 
     [SerializeField]
-    private AnimationCurve intancityCurve = AnimationCurve.Linear( 0, 0.5f, 1, 1);
+    private AnimationCurve intensityCurve = AnimationCurve.Linear( 0, 0.5f, 1, 1);
     [SerializeField]
     [Range(20, 40)]
-    private int intancityMultiplier = 30;
+    private int intensityMultiplier = 30;
 
 
     public void Awake() {
@@ -49,7 +49,6 @@ public class AudioSystemController : MonoBehaviour {
                     audioImpactListeners[i].Key.AudioImpact( GetBaseIntensity() ); 
                     break;
             }
-            
         }
     }
 
@@ -60,6 +59,12 @@ public class AudioSystemController : MonoBehaviour {
     }
 
 
+    /*
+      Because the AudioSystemsController is the place that knows
+      if the audioSource is already loaded,
+      this is the easiest place to ensure that the players do not leave the area before
+      the song has started.
+    */
     void clampPlayers() {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
@@ -78,7 +83,7 @@ public class AudioSystemController : MonoBehaviour {
     }
 
     private float GetBaseIntensity() {
-        if (audioSource.clip == null) 
+        if (audioSource.clip == null)
             return 0.02f;
 
         float[] spectrum = new float[128];
@@ -86,18 +91,15 @@ public class AudioSystemController : MonoBehaviour {
 
         AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
 
-        for (int i = 1; i < (spectrum.Length / 2f) - 1; i++) {
+        for (int i = 1; i < (spectrum.Length / 2f) - 1; ++i) {
             result += spectrum[i] *2;
-
-            //Debug.DrawLine(new Vector3(i/64F, 0, -1), new Vector3(i/64F, spectrum[i]*5, -1), Color.yellow);
         }
 
-        return result / 128f * intancityCurve.Evaluate(  Remap(audioSource.time, 0, audioSource.clip.length, 0, 1) ) * intancityMultiplier;
+        return result / 128f * intensityCurve.Evaluate(  Remap(audioSource.time, 0, audioSource.clip.length, 0, 1) ) * intensityMultiplier;
     }
 
-    
     private float GetIntensity() {
-        if (audioSource.clip == null) 
+        if (audioSource.clip == null)
             return 0.02f;
 
         float[] spectrum = new float[128];
@@ -105,12 +107,11 @@ public class AudioSystemController : MonoBehaviour {
 
         AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
 
-        for (int i = 1; i < spectrum.Length - 1; i++) {
+        for (int i = 1; i < spectrum.Length - 1; ++i) {
             result += spectrum[i];
-            Debug.DrawLine(new Vector3(i/64F, 0, -1), new Vector3(i/64F, spectrum[i]*5, -1), Color.yellow);
         }
 
-        return result / 128f * intancityCurve.Evaluate(  Remap(audioSource.time, 0, audioSource.clip.length, 0, 1) ) * intancityMultiplier;
+        return result / 128f * intensityCurve.Evaluate(  Remap(audioSource.time, 0, audioSource.clip.length, 0, 1) ) * intensityMultiplier;
     }
 
 
