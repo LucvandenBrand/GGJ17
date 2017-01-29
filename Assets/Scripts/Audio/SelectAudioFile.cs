@@ -64,7 +64,7 @@ public class SelectAudioFile : MonoBehaviour {
         Process process = new Process();
         process.StartInfo.FileName = SoxFilename();
         process.StartInfo.WorkingDirectory = Application.dataPath;
-        process.StartInfo.Arguments = "\"" + audioPath + "\" " + tmpWavPath;
+        process.StartInfo.Arguments = "\"" + audioPath + "\" \"" + tmpWavPath + "\"";
         process.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;
         process.StartInfo.UseShellExecute = false;
         process.StartInfo.CreateNoWindow = true;
