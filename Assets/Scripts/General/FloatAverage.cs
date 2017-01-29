@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* Collects float samples and returns an average over windowSize. */
 public class FloatAverage {
     private int windowSize;
     private Queue<float> floatQueue;

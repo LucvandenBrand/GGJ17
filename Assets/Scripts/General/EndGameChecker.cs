@@ -2,46 +2,90 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/* Waits until all players have died and then shows a
+ * gameover screen. */
 public class EndGameChecker : MonoBehaviour {
     [SerializeField]
     private Canvas winScreen;
     [SerializeField]
     private QuoteMaker quoteMaker;
-    private bool gameOver = false;
+    private bool gameOver = false; // Boolean that remembers wether or not a GameOver has triggered.
 
-    // Update is called once per frame
+    /* Every frame, check for a game over state. */
     void Update() {
         Player[] players = FindObjectsOfType<Player>();
+
+        if (CountLivingPlayers(players) == 0)
+        {
+            OnButtonStartGame();
+            if (!gameOver)
+            {
+                ShowLeaderBoard(players);
+                gameOver = true;
+            } 
+            SetLeaderBoardPosition(players);
+        }
+    }
+
+    /* When the start button has been pressed, return to lobby. */
+    void OnButtonStartGame()
+    {
+        if (Input.GetButtonDown("StartButtonJ1") || Input.GetKeyDown(KeyCode.Return))
+            ReturnToLobby();
+    }
+
+    /* Delete players and reenter lobby. */
+    private void ReturnToLobby()
+    {
+        Player[] players = FindObjectsOfType<Player>();
+        foreach (Player player in players)
+        {
+            player.transform.SetParent(gameObject.transform);
+        }
+        SceneManager.LoadScene(1, LoadSceneMode.Single);
+    }
+
+    /* Counts the number of living players. */
+    private int CountLivingPlayers(Player[] players)
+    {
         int liveCount = 0;
         foreach (Player player in players)
         {
             if (player.GetLives() != 0) liveCount++;
         }
-
-        // Check for gameover.
-        if (liveCount == 0)
-        {
-            OnButtonStartGame();
-            if (!gameOver)
-            {
-                ShowLeaderBoard();
-                gameOver = true;
-            } else
-            {
-                SetLeaderBoardPosition(players);
-            }
-        }
+        return liveCount;
     }
 
-    // Show the leaderboard.
-    private void ShowLeaderBoard()
+    /* Show the leaderboard. */
+    private void ShowLeaderBoard(Player[] players)
     {
-        Player[] players = FindObjectsOfType<Player>();
         Canvas screen = Instantiate(winScreen);
         screen.transform.Find("Quote").GetComponent<Text>().text = quoteMaker.GetQuote();
         SetScores(screen, players);
     }
 
+    /* Set the highscores on the given canvas. */
+    private void SetScores(Canvas canvas, Player[] players)
+    {
+        int winner = GetWinner(players);
+        int stepCount = 2;
+        for (int i = 0; i < players.Length; ++i)
+        {
+            string objName = "ScoreP";
+            if (i == winner)
+            {
+                objName += 1;
+            }
+            else
+            {
+                objName += stepCount++;
+            }
+            string secondsStr = SecondFormatter.FormatSeconds((int)players[i].GetLiveTime());
+            canvas.transform.Find(objName).GetComponent<Text>().text = secondsStr;
+        }
+    }
+
+    /* Returns the player with the maximum livetime. */
     private int GetWinner(Player[] players)
     {
         int winner = 0;
@@ -57,6 +101,7 @@ public class EndGameChecker : MonoBehaviour {
         return winner;
     }
 
+    /* Place players on the leaderboard and fix their positions. */
     private void SetLeaderBoardPosition(Player[] players)
     {
         if (players.Length == 0) {
@@ -79,7 +124,8 @@ public class EndGameChecker : MonoBehaviour {
             if (i != winner)
             {
                 players[i].ShowPlayer(true);
-                players[i].GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+                players[i].GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX 
+                                                                   | RigidbodyConstraints2D.FreezePositionY;
                 newPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width * stepCount * stepX, Screen.height * 0.2f));
                 newPos.z = 2;
                 players[i].transform.position = newPos;
@@ -87,55 +133,5 @@ public class EndGameChecker : MonoBehaviour {
                 stepCount++;
             }
         }
-    }
-
-    private void SetScores(Canvas canvas, Player[] players)
-    {
-        int winner = GetWinner(players);
-        int stepCount = 2;
-        for (int i = 0; i < players.Length; ++i)
-        {
-            string objName = "ScoreP";
-            if (i == winner)
-            {
-                objName += 1;
-            } else
-            {
-                objName += stepCount++;
-            }
-            string secondsStr = formatSeconds((int)players[i].GetLiveTime());
-            canvas.transform.Find(objName).GetComponent<Text>().text = secondsStr;
-        }
-    }
-
-    private string formatSeconds(int rawSeconds)
-    {
-
-        int minutes = rawSeconds / 60;
-        int seconds = rawSeconds % 60;
-        string secondsStr = "";
-        secondsStr += minutes + ":";
-        if (seconds < 10)
-        {
-            secondsStr += "0";
-        }
-        return secondsStr += seconds;
-    }
-
-    // Delete players and reenter lobby.
-    private void ReturnToLobby()
-    {
-        Player[] players = FindObjectsOfType<Player>();
-        foreach (Player player in players)
-        {
-            player.transform.SetParent(gameObject.transform);
-        }
-        SceneManager.LoadScene(1,LoadSceneMode.Single);
-    }
-
-    void OnButtonStartGame()
-    {
-        if (Input.GetButtonDown("StartButtonJ1") || Input.GetKeyDown(KeyCode.Return))
-            ReturnToLobby();
     }
 }
