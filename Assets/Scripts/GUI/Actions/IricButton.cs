@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/* When this object is tapped, it will animate the menuEye object
+ * and load lobby scene. */
+[RequireComponent(typeof(AudioSource))]
 public class IricButton : MonoBehaviour {
-    public AudioClip whoomSound;
+    [SerializeField]
+    private GameObject menuEye;
 
     public void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            PulseAnimation anim = GameObject.Find("MenuEye").AddComponent<PulseAnimation>();
+            PulseAnimation anim = menuEye.AddComponent<PulseAnimation>();
             anim.SetFrequency(10);
             anim.SetAmplitude(0.2f);
-            anim.SetMinScale(3f);
-            AudioSource source = GetComponent<AudioSource>();
-            source.PlayOneShot(whoomSound, 2.0f);
+            anim.SetMinScale(2.5f);
+            GetComponent<AudioSource>().Play();
             StartCoroutine("StartGame", 0.5f);
         }
     }

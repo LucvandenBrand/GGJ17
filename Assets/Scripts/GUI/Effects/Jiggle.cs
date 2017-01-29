@@ -1,27 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/* Will 'jiggle' the UI element this script is attached to. */
 [RequireComponent(typeof(RectTransform))]
 public class Jiggle : MonoBehaviour {
-    public float speedX = 10;
-    public float speedY = 10;
-    public float amplitudeX = 10;
-    public float amplitudeY = 10;
-    public float phaseX = 0;
-    public float phaseY = 0;
+    [SerializeField]
+    private float speedX = 10;
+    [SerializeField]
+    private float speedY = 10;
+    [SerializeField]
+    private float amplitudeX = 10;
+    [SerializeField]
+    private float amplitudeY = 10;
+    [SerializeField]
+    private float phaseX = 0;
+    [SerializeField]
+    private float phaseY = 0;
+
     private RectTransform rectTransform;
     private Vector3 origin;
     private float omegaX = 0;
     private float omegaY = 0;
 
-	// Use this for initialization
 	void Start () {
         this.rectTransform = gameObject.GetComponent<RectTransform>();
         this.origin = rectTransform.localPosition;
 	}
 	
-	// Update is called once per frame
+	/* Place the transform relative to the time passed and
+     * set parameters. */
 	void Update () {
         this.omegaX += Time.deltaTime * speedX;
         this.omegaY += Time.deltaTime * speedY;

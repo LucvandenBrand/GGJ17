@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/* Makes sure the object is only shown when player 
+ * entities are present in the scene. */
 [RequireComponent(typeof(CanvasRenderer))]
 public class OnlyWithPlayers : MonoBehaviour {
-	
-	// Update is called once per frame
 	void Update () {
         int playerCount = GameObject.FindGameObjectsWithTag("Player").Length;
         if (playerCount == 0)
