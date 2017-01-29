@@ -2,7 +2,6 @@
 using UnityEngine;
 using System.Diagnostics;
 using System.IO;
-using Application = UnityEngine.Application;
 
 /* This class opens a file browser that prompts for an audio file.
  * The audio file is downloaded into the assets and played on the
@@ -37,7 +36,9 @@ public class SelectAudioFile : MonoBehaviour {
     {
         yield return StartCoroutine(SimpleFileBrowser.WaitForLoadDialog(false, null, "Load File", "Load"));
         Instantiate(loadScreen);
-        StartCoroutine(LoadAudio(SimpleFileBrowser.Result));
+        Application.runInBackground = true;
+        yield return StartCoroutine(LoadAudio(SimpleFileBrowser.Result));
+        Application.runInBackground = false;
     }
 
     /* Download the file to the assets and insert it into the AudioSouce. */
