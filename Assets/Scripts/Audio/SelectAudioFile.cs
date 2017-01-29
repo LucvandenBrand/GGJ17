@@ -103,7 +103,8 @@ public class SelectAudioFile : MonoBehaviour {
             case (RuntimePlatform.WindowsEditor):
                 return Path.Combine("sox", "sox.exe");
             case (RuntimePlatform.LinuxPlayer):
-                return Path.Combine("EyeCantHear_Data", Path.Combine("sox", "sox_linux"));
+                return Path.Combine("sox", "sox_linux");
+                // return Path.Combine("EyeCantHear_Data", Path.Combine("sox", "sox_linux"));
             case (RuntimePlatform.WindowsPlayer):
                 return Path.Combine("EyeCantHear_Data", Path.Combine("sox", "sox.exe"));
             default:

@@ -102,6 +102,7 @@
 			fixed4 outColour = fixed4(bgHue + 0.2*uv.y, bgHue + 0.2*uv.y, bgHue + 0.2*uv.y,1);
 
 			// Bubbles
+      [unroll(100)]
 			for (int i = 0; i < 40; i++) {
 
 				// Bubble seeds
