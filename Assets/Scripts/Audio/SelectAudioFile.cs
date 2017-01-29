@@ -4,52 +4,55 @@ using System.Diagnostics;
 using System.IO;
 using Application = UnityEngine.Application;
 
-
+/* This class opens a file browser that prompts for an audio file.
+ * The audio file is downloaded into the assets and played on the
+ * (required) attached AudioSource. */
 [RequireComponent( typeof(AudioSource) )]
 public class SelectAudioFile : MonoBehaviour {
+    [SerializeField]
+    private Canvas loadScreen;
     private AudioSource audioSource;
-    public Canvas loadScreen; 
-    private AudioClip resultClip;
 
-
-
-    void Awake() {
+    void Awake()
+    {
         audioSource = GetComponent<AudioSource>();
     }
 
-    void Start() {
+    void Start()
+    {
         SimpleFileBrowser.SetFilters(".mp3", ".wav", ".ogg", ".aiff", ".flac");
-        SimpleFileBrowser.SetDefaultFilter(".mp3");
+        SimpleFileBrowser.SetDefaultFilter("All Files");
         SimpleFileBrowser.AddQuickLink(null, "Users", "C:\\Users");
-        StartCoroutine(ShowLoadDialogCoroutine());
+        StartCoroutine(ShowLoadDialog());
     }
 
-    IEnumerator ShowLoadDialogCoroutine() {
+    void Update()
+    {
+        if (audioSource.clip != null)
+            if (!audioSource.isPlaying && audioSource.clip.loadState == AudioDataLoadState.Loaded)
+                audioSource.Play();
+    }
+
+    IEnumerator ShowLoadDialog()
+    {
         yield return StartCoroutine(SimpleFileBrowser.WaitForLoadDialog(false, null, "Load File", "Load"));
         Instantiate(loadScreen);
-        LoadAudioFile(SimpleFileBrowser.Result);
+        StartCoroutine(LoadAudio(SimpleFileBrowser.Result));
     }
 
-
-    public void LoadAudioFile( string audioPath ) {
-        StartCoroutine(LoadAudio(audioPath));
-    }
-
-    /*
-      Only used on Linux right now.
-      */
-    private string SoxFilename()
+    // Download the file to the assets and insert it into the AudioSouce.
+    IEnumerator LoadAudio(string audioPath)
     {
-        #if UNITY_EDITOR_LINUX
-            return Path.Combine("sox", "sox_linux");
-        #elif UNITY_EDITOR_WINDOWS
-            return Path.Combine("sox", "sox.exe");
-        #elif UNITY_STANDALONE_LINUX
-            return Path.Combine("EyeCantHear_Data", Path.Combine("sox","sox_linux"));
-        #else
-            return Path.Combine("EyeCantHear_Data", Path.Combine("sox", "sox.exe"));
-        #endif
-
+        if (!audioPath.EndsWith(".wav"))
+            audioPath = convertSoundToWav(audioPath);
+        string url = "file:///" + audioPath;
+        WWW www = new WWW(url);
+        while (!www.isDone)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        audioSource.clip = www.audioClip;
+        yield return null;
     }
 
     /*
@@ -57,7 +60,7 @@ public class SelectAudioFile : MonoBehaviour {
     */
     private string convertSoundToWav(string audioPath)
     {
-        string tmpWavPath =Path.Combine(Application.dataPath, "tmp.wav");
+        string tmpWavPath =Path.Combine(Application.dataPath.Replace("/", "\\"), "tmp.wav");
 
         Process process = new Process();
         process.StartInfo.FileName = SoxFilename();
@@ -93,31 +96,23 @@ public class SelectAudioFile : MonoBehaviour {
         return tmpWavPath;
     }
 
-
-
-
-    IEnumerator LoadAudio( string audioPath ) {
-
-            if (!audioPath.EndsWith(".wav"))
-            {
-                audioPath = convertSoundToWav(audioPath);
-            }
-
-        string url = "file:///" + audioPath;
-        WWW www = new WWW(url);
-        while (!www.isDone) {
-            yield return new WaitForEndOfFrame();
-        }
-
-            audioSource.clip = resultClip = www.audioClip;
-        yield return null;
-    }
-
-    void Update() {
-        if (audioSource.clip != null) {
-            if (!audioSource.isPlaying && audioSource.clip.isReadyToPlay)
-                audioSource.Play();
+    /* Get the proper filename for sox, as it is OS dependent. */
+    private string SoxFilename()
+    {
+        switch (Application.platform)
+        {
+            case (RuntimePlatform.LinuxEditor):
+                return Path.Combine("sox", "sox_linux");
+            case (RuntimePlatform.WindowsEditor):
+                return Path.Combine("sox", "sox.exe");
+            case (RuntimePlatform.LinuxPlayer):
+                return Path.Combine("EyeCantHear_Data", Path.Combine("sox", "sox_linux"));
+            case (RuntimePlatform.WindowsPlayer):
+                return Path.Combine("EyeCantHear_Data", Path.Combine("sox", "sox.exe"));
+            default:
+                UnityEngine.Debug.LogError("RuntimePlatform " + Application.platform + " unsupported!");
+                Application.Quit();
+                return "";
         }
     }
-
 }
