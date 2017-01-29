@@ -7,7 +7,7 @@ using UnityEngine;
 public enum AudioImpactType {
     INTENSITY,
     SPEED,
-    BASE_INTENSITY
+    BASS_INTENSITY
 }
 
 
@@ -26,10 +26,15 @@ public class AudioSystemController : MonoBehaviour {
     [Range(20, 40)]
     private int intensityMultiplier = 30;
 
+    [SerializeField]
+    private int FFTPrecision = 5; // the higher, the preciser the FFT-data, and the slower the game.
+    private int FFTSampleSize; // 2 << FFTPrecision.
+
 
     public void Awake() {
         instance = this;
         audioSource = GetComponent<AudioSource>();
+        FFTSampleSize = 2 << FFTPrecision;
     }
 
     void Update() {
@@ -45,8 +50,8 @@ public class AudioSystemController : MonoBehaviour {
                 case AudioImpactType.SPEED:
                     throw new NotImplementedException();
                     break;
-                case AudioImpactType.BASE_INTENSITY:
-                    audioImpactListeners[i].Key.AudioImpact( GetBaseIntensity() ); 
+                case AudioImpactType.BASS_INTENSITY:
+                    audioImpactListeners[i].Key.AudioImpact( GetBassIntensity() ); 
                     break;
             }
         }
@@ -82,36 +87,42 @@ public class AudioSystemController : MonoBehaviour {
         return 5;
     }
 
-    private float GetBaseIntensity() {
+    /*
+      Returns the unmodified intensity of the song at this point in time.
+      upperLimit should be a number between 0.0 and 1.0,
+      if 0.5, only the lower 0.5 part of the spectrum is used.
+     */
+    private float GetRawIntensity(float upperLimit) {
         if (audioSource.clip == null)
-            return 0.02f;
+            return 0.0001f;
 
-        float[] spectrum = new float[128];
+        float[] spectrum = new float[FFTSampleSize];
         float result = 0;
 
         AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
 
-        for (int i = 1; i < (spectrum.Length / 2f) - 1; ++i) {
-            result += spectrum[i] *2;
+        for (int i = 0; i < (spectrum.Length * upperLimit); ++i) {
+            result += spectrum[i] / upperLimit;
         }
-
-        return result / 128f * intensityCurve.Evaluate(  Remap(audioSource.time, 0, audioSource.clip.length, 0, 1) ) * intensityMultiplier;
+        return result / FFTSampleSize;
     }
 
-    private float GetIntensity() {
+    /*
+      Returns the intensity of the lower half of the spectrum.
+    */
+    private float GetBassIntensity() {
+        return GetIntensity(0.5f);
+    }
+
+    /*
+      Returns the intensity of the whole spectrum,
+      multiplied with the intensity curve.
+     */
+    private float GetIntensity(float upperLimit = 1.0f) {
         if (audioSource.clip == null)
-            return 0.02f;
+            return 0.0001f;
 
-        float[] spectrum = new float[128];
-        float result = 0;
-
-        AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
-
-        for (int i = 1; i < spectrum.Length - 1; ++i) {
-            result += spectrum[i];
-        }
-
-        return result / 128f * intensityCurve.Evaluate(  Remap(audioSource.time, 0, audioSource.clip.length, 0, 1) ) * intensityMultiplier;
+        return GetRawIntensity(upperLimit) * intensityCurve.Evaluate(  Remap(audioSource.time, 0, audioSource.clip.length, 0, 1) ) * intensityMultiplier;
     }
 
 
