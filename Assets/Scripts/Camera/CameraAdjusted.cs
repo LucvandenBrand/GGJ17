@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CameraAdjusted : MonoBehaviour {
-	
-	// Update is called once per frame
-	void Update () {
+/* Scales the object every frame to perfectly fit the main camera.
+ * Best used for quads that need to be used as a background. */
+public class CameraAdjusted : MonoBehaviour {	
+	void Update ()
+    {
         ScaleMesh();
 	}
 
-    // Scales the mesh to perfectly fit the screen.
     void ScaleMesh()
     {
         float screenX = Screen.width;

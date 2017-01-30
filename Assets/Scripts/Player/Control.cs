@@ -1,33 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 
+/* Allows users to control their player with keyboard and xbox controllers. */
 public class Control : MonoBehaviour
 {
-    private string leftStickHorName = "HorizontalLeftStick";
-
-    private string leftStickVerName = "VerticalLeftStick";
-
-    private string rightStickHorName = "HorizontalRightStick";
-
-    private string rightStickVerName = "VerticalRightStick";
-
-    private string leftTriggerName = "LeftTrigger";
-
-    private string rightTriggerName = "RightTrigger";
-
-    private float horInput;
-
-    private float verInput;
-
-    public float movementSpeed = 1f;
-
+    [SerializeField]
+    private float movementSpeed = 1f;
     [SerializeField]
     private int playerNumberLeft = 0;
-
     [SerializeField]
     private int playerNumberRight = 0;
-
     [SerializeField]
     private bool arrowKeysPlayer = false;
     [SerializeField]
@@ -37,10 +18,16 @@ public class Control : MonoBehaviour
     [SerializeField]
     private bool numpadKeysPlayer = false;
 
+    private string leftStickHorName = "HorizontalLeftStick";
+    private string leftStickVerName = "VerticalLeftStick";
+    private string rightStickHorName = "HorizontalRightStick";
+    private string rightStickVerName = "VerticalRightStick";
+    private string leftTriggerName = "LeftTrigger";
+    private string rightTriggerName = "RightTrigger";
+    private float horInput;
+    private float verInput;
     private Rigidbody2D rigidbodyCurrent;
 
-
-    // Use this for initialization
     private void Start()
     {
         rigidbodyCurrent = gameObject.GetComponent<Rigidbody2D>();
@@ -55,6 +42,7 @@ public class Control : MonoBehaviour
     {
         playerNumberRight = playerNr;
     }
+
     public void SetArrowKeysPlayer()
     {
         arrowKeysPlayer = true;
@@ -64,10 +52,12 @@ public class Control : MonoBehaviour
     {
         wasdKeysPlayer = true;
     }
+
     public void SetIJKLKeysPlayer()
     {
         ijklKeysPlayer = true;
     }
+
     public void SetNumpadKeysPlayer()
     {
         numpadKeysPlayer = true;
@@ -83,7 +73,6 @@ public class Control : MonoBehaviour
 
         amplitude = Mathf.Clamp(amplitude, 0, 1) * independentSpeed;
         Vector2 movementVector = new Vector2(Mathf.Cos(angle) * amplitude, Mathf.Sin(angle) * amplitude);
-        
         rigidbodyCurrent.AddForce(movementVector);
     }
 
@@ -127,14 +116,12 @@ public class Control : MonoBehaviour
         else if (playerNumberLeft > 0 && playerNumberLeft <= 4)
         {
             horInput = Input.GetAxisRaw(leftStickHorName + playerNumberLeft);
-
             verInput = Input.GetAxisRaw(leftStickVerName + playerNumberLeft);
         }
 
         else if (playerNumberRight > 0 && playerNumberRight <= 4)
         {
             horInput = Input.GetAxisRaw(rightStickHorName + (playerNumberRight));
-
             verInput = Input.GetAxisRaw(rightStickVerName + (playerNumberRight));
         }
     }
@@ -142,5 +129,10 @@ public class Control : MonoBehaviour
     public Vector2 GetDirection()
     {
         return new Vector2(horInput, verInput);
+    }
+
+    public void SetMovementSpeed(float speed)
+    {
+        this.movementSpeed = speed;
     }
 }

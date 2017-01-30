@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/* Objects implementing this class can have behavior dependent
+ * on the music currently playing. */
 public abstract class AudioImpactListener : MonoBehaviour {
+    /* This method is called whenever new music state data is available. */
     public abstract void AudioImpact( float reguestedCallbackValue );
 
-    public void Start() {
+    public void Start()
+    {
         GetAudioSystemController().AddAudioImpactListener(this);
     }
 
-    void OnDestroy() {
+    void OnDestroy()
+    {
         GetAudioSystemController().RemoveAudioImpactListener(this);
     }
 

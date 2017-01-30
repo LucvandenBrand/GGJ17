@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-
-
+/* Animates the object to point to the direction the 
+ * Control script is moving it. */
 [RequireComponent(typeof(Control))]
 public class EyeAnimator : MonoBehaviour {
     private Control control;
-    //private Quaternion rawRotation;
 
     public void Start()
     {
@@ -21,8 +18,8 @@ public class EyeAnimator : MonoBehaviour {
 
     public void PointAt(Vector2 direction)
     {
-        float tiltY = 90 - direction.x*45;
-        float tiltZ = direction.y*45;
+        float tiltY = 90 - direction.x * 45;
+        float tiltZ = direction.y * 45;
         Quaternion currentRotation = gameObject.transform.rotation;
         Quaternion target = Quaternion.Euler(0, tiltY, tiltZ);
         

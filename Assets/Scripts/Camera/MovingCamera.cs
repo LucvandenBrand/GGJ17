@@ -1,34 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-
-
-/* A camera that always moves in one given direction. */
+/* A camera that always moves in one given direction, 
+ * based on the music currently playing. */
 [RequireComponent(typeof(Camera))]
 public class MovingCamera : AudioImpactListener {
 
     [SerializeField]
     private float intensitySumThreshold = 5;
+    [SerializeField]
+    private float acceleration = 1;
+
     private Camera moveCamera;
     private FloatAverage average = new FloatAverage(15);
     private float direction = 0;
     private float intensitySum = 0;
-    [SerializeField]
-    private float acceleration = 1;
 
-	// Use this for initialization
-	public void Start () {
+	public void Start ()
+    {
         base.Start();
         this.moveCamera = GetComponent<Camera>();
 	}
 
+    /* Every audioimpact, move the camera in a certain direction. */
     public override void AudioImpact(float intensity)
     {
         UpdateDirection(intensity);
         Move( 5 * acceleration);
     }
-
+    
+    /* Change the direction if a threshold of summed intensity is met. */
     private void UpdateDirection(float intensity)
     {
         this.average.Add(intensity);

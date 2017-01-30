@@ -1,8 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-/* Player behavior. */
+/* Models player object behavior, such as what to do when
+ * a player collides and managing live count. */
 public class Player : MonoBehaviour
 {
     [SerializeField]
@@ -15,14 +15,15 @@ public class Player : MonoBehaviour
     private GameObject playerCollisionParticleSystem;
     [SerializeField]
     private int lives = 5;
+
     private bool hidden = false;
-    private float liveTime = 0;
-    private static int playerCount = 0;
+    private float liveTime = 0; // How long has the player been alive?
+    private static int playerCount = 0; // Counts how many instances are alive (mod 12).
     private int playerIndex = 0;
     private Color playerColor;
 
 
-    // Choose random iris color at start.
+    /* Choose random iris color at start. */
     public void Start()
     {
         playerIndex = playerCount;
@@ -34,18 +35,22 @@ public class Player : MonoBehaviour
         transform.Find("Iris").GetComponent<TrailRenderer>().startColor = playerColor;//.material.SetColor("_Color", irisColor);
     }
 
+    /* Every frame, if the player is alive, increase the livetime. */
     public void Update()
     {
         if (lives > 0)
             this.liveTime += Time.deltaTime;
     }
 
+    /* Do not allow the player to live outside of the screen. */
     public void OnBecameInvisible()
     {
         if (!hidden)
             kill();
     }
 
+    /* When the player collides with another physics object, either
+     * die or add some nice particles. */
     void OnCollisionEnter2D(Collision2D coll)
     {
         if (!hidden && coll.gameObject.tag == "Enemy")
@@ -54,14 +59,14 @@ public class Player : MonoBehaviour
             GameObject.Destroy(coll.gameObject);
             kill();
         }
-
-        if (!hidden && coll.gameObject.tag == "Player")
+        else if (!hidden && coll.gameObject.tag == "Player")
         {
             GameObject particles = Instantiate(playerCollisionParticleSystem, Camera.main.transform);
             particles.transform.position = coll.transform.position;
         }
     }
 
+    /* The player loses a live. */
     public void kill()
     {
         lives = Mathf.Max(0, lives - 1);
@@ -91,6 +96,7 @@ public class Player : MonoBehaviour
         
     }
 
+    /* Hide the player (visually) from the screen. */
     public void ShowPlayer(bool show)
     {
         this.GetComponent<MeshRenderer>().enabled = show;
@@ -100,6 +106,8 @@ public class Player : MonoBehaviour
             renderer.enabled = show;
     }
 
+    /* Place the player, after a spawnDelay, back in the game, visible and all.
+     * The collider will be enabled a bit later, to allow for invincability. */
     IEnumerator Respawn(float spawnDelay)
     {
         yield return new WaitForSeconds(spawnDelay);

@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/* Makes an object `pulse' by oscillating the scale
+ *  until the script is removed. */
 public class PulseAnimation : MonoBehaviour {
     [SerializeField]
     private float pulseSize = 1;
@@ -9,6 +9,7 @@ public class PulseAnimation : MonoBehaviour {
     private float pulseSpeed = 1;
     [SerializeField]
     private float minScale = 0;
+
     private float alpha = 0;
     private Vector3 originalScale;
 
@@ -17,8 +18,10 @@ public class PulseAnimation : MonoBehaviour {
         this.originalScale = transform.localScale;
     }
 	
-	// Update is called once per frame
-	void Update () {
+    /* Every frame, update alpha with the passed time
+     * and set the scale to cos(alpha). */
+	void Update ()
+    {
         alpha += Time.deltaTime*pulseSpeed;
         alpha %= Mathf.PI * 2;
         float scale = minScale + Mathf.Cos(alpha) * pulseSize;

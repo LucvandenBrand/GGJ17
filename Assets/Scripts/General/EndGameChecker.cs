@@ -111,7 +111,7 @@ public class EndGameChecker : MonoBehaviour {
 
         int winner = GetWinner(players);
         players[winner].ShowPlayer(true);
-        players[winner].GetComponent<Control>().movementSpeed = 0;
+        players[winner].GetComponent<Control>().SetMovementSpeed(0);
         Vector3 newPos = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width * 0.11f, Screen.height * 0.7f));
         newPos.z = 2;
         players[winner].transform.position = newPos;
