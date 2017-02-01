@@ -10,7 +10,7 @@ A trippy rithm game you supply with your own music: it performs a FFT analysis o
 ##Binaries
 The binaries are more often than not behind the source, so feel free to build this repo to be sure of the freshest of experiences :wink:. A warm thanks to WM for hosting!
 - [I run Windows](http://wmcode.nl/GGJ/2017/EyeCantHear_Windows1.1.zip). 
-- [I run Linux](http://wmcode.nl/GGJ/2017/EyeCantHear_Linux1.1.zip):
+- [Nah man, I run Linux](http://wmcode.nl/GGJ/2017/EyeCantHear_Linux1.1.zip).
 
 ##Long term goals
 - [ ] Balanced play experience on most genres of music.
