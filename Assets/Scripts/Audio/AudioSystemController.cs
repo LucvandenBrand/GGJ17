@@ -2,34 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
+/* All types of music analysis information we can
+ * return to our listeners. */
 public enum AudioImpactType {
     INTENSITY,
     SPEED,
     BASS_INTENSITY
 }
 
-
-/* Controls all audio elements. */
+/* Controls all audio elements based on the music currently playing.
+ * Implemented as a singleton. */
 [RequireComponent( typeof(AudioSource) )]
 public class AudioSystemController : MonoBehaviour {
-    private static AudioSystemController instance = null;
-
-    private List< KeyValuePair<AudioImpactListener, AudioImpactType> > audioImpactListeners = new List< KeyValuePair<AudioImpactListener, AudioImpactType> >();
-    public AudioSource audioSource;
-    private float alpha = 0;
-
     [SerializeField]
-    private AnimationCurve intensityCurve = AnimationCurve.Linear( 0, 0.5f, 1, 1);
+    private AudioSource audioSource;
+    [SerializeField]
+    private AnimationCurve intensityCurve = AnimationCurve.Linear(0, 0.5f, 1, 1);
     [SerializeField]
     [Range(20, 40)]
     private int intensityMultiplier = 30;
-
     [SerializeField]
     private int FFTPrecision = 5; // the higher, the preciser the FFT-data, and the slower the game.
-    private int FFTSampleSize; // 2 << FFTPrecision.
 
+    private static AudioSystemController instance = null;
+    private List< KeyValuePair<AudioImpactListener, AudioImpactType> > audioImpactListeners = new List< KeyValuePair<AudioImpactListener, AudioImpactType> >();
+    private float alpha = 0;
+    private int FFTSampleSize; // 2 << FFTPrecision.
 
     public void Awake() {
         instance = this;
@@ -37,6 +35,7 @@ public class AudioSystemController : MonoBehaviour {
         FFTSampleSize = 2 << FFTPrecision;
     }
 
+    /* Every frame, call all listeners with the current intesity of the music.*/
     void Update() {
         if(audioSource == null)
         {
@@ -48,7 +47,7 @@ public class AudioSystemController : MonoBehaviour {
                     audioImpactListeners[i].Key.AudioImpact( GetIntensity() );
                     break;
                 case AudioImpactType.SPEED:
-                    throw new NotImplementedException();
+                    audioImpactListeners[i].Key.AudioImpact(GetSpeed());
                     break;
                 case AudioImpactType.BASS_INTENSITY:
                     audioImpactListeners[i].Key.AudioImpact( GetBassIntensity() ); 
@@ -57,12 +56,11 @@ public class AudioSystemController : MonoBehaviour {
         }
     }
 
-
+    /* Make sure players do not leave the screen when no music is playing. */
     private void LateUpdate() {
         if (audioSource.clip == null)
             clampPlayers();
     }
-
 
     /*
       Because the AudioSystemsController is the place that knows
@@ -81,10 +79,9 @@ public class AudioSystemController : MonoBehaviour {
         }
     }
 
-
+    /* Returns the speed of the music currently playing. */
     private float GetSpeed() {
         throw new NotImplementedException();
-        return 5;
     }
 
     /*
@@ -125,7 +122,6 @@ public class AudioSystemController : MonoBehaviour {
         return GetRawIntensity(upperLimit) * intensityCurve.Evaluate(  Remap(audioSource.time, 0, audioSource.clip.length, 0, 1) ) * intensityMultiplier;
     }
 
-
     public void AddAudioImpactListener( AudioImpactListener ail, AudioImpactType impactType = AudioImpactType.INTENSITY ) {
         audioImpactListeners.Add( new KeyValuePair<AudioImpactListener, AudioImpactType>(ail, impactType) );
     }
@@ -134,7 +130,6 @@ public class AudioSystemController : MonoBehaviour {
         audioImpactListeners.Remove( new KeyValuePair<AudioImpactListener, AudioImpactType>(ail, impactType) );
     }
 
-
     public static AudioSystemController GetAudioSystemController() {
         if (instance) 
             return instance;
@@ -142,6 +137,11 @@ public class AudioSystemController : MonoBehaviour {
             Debug.LogWarning( "!!! this singleton had no instance, a new Object is Generated - AudioSystemController::GetAudioSystemController " );
             return new GameObject().AddComponent<AudioSystemController>().gameObject.GetComponent<AudioSystemController>();  // wow
         }
+    }
+
+    public AudioSource GetAudioSource()
+    {
+        return audioSource;
     }
 
     private float Remap (float value, float from1, float to1, float from2, float to2) {

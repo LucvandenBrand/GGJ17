@@ -1,16 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/* An object in the game that is out to hurt the player. 
+ * Is dependant on the music, and thus an AudioImpactListener. */
 public class Enemy : AudioImpactListener
 {
-
-    [HideInInspector]
-    public Vector3 movedirection;
-    [HideInInspector]
-    public float speed;
-    protected float curIntensity = 0;
-    [HideInInspector]
-    public float sizeScale = 2;
     [SerializeField]
     protected float destroyAfterSeconds = 5f;
     [SerializeField]
@@ -21,24 +15,22 @@ public class Enemy : AudioImpactListener
     protected float maxScale = 0.7f;
     [SerializeField]
     protected float maxSpeed = 0.1f;
-
-
+    protected Vector3 movedirection;
+    protected float speed;
+    protected float curIntensity = 0;
+    protected float sizeScale = 2;
 
     public void Start()
     {
         base.Start();
         speed = enemySpeed;
         movedirection = -transform.position.normalized;
-
-        //destroyAfterSeconds = 5f;
-
-        gameObject.AddComponent<DestroyAfter>().destroyAfter = destroyAfterSeconds;
+        gameObject.AddComponent<DestroyAfter>().SetDestroyDelay(destroyAfterSeconds);
     }
 
     public override void AudioImpact(float intensity)
     {
         this.curIntensity = intensity;
-
         this.ScaleBody(intensity);
     }
 

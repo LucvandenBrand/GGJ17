@@ -1,27 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+/* Enemy that dances to the beat of the music. */
 public class EnemyBeat : Enemy
 {
-
     [SerializeField]
     private float intensityTreshold = 0f;
     
     public new void Start()
     {
-        //destroyAfterSeconds = destroyBeatEnemyAfterSeconds;
         base.Start();
     }
 
     public override void AudioImpact(float intensity)
     {
         this.curIntensity = intensity;
-
-        //if (this.curIntensity >= intensityTreshold)
-        //{
-            this.ScaleBody(0.5f - intensity);
-        //}
-
+        this.ScaleBody(0.5f - intensity);
     }
 
     public void ScaleBody(float scale)
@@ -32,8 +25,6 @@ public class EnemyBeat : Enemy
     void Update()
     {
         if (this.curIntensity <= intensityTreshold)
-        {
             transform.Translate(movedirection * speed * curIntensity);
-        }
     }
 }
