@@ -31,4 +31,17 @@ sysinfo.txt
 # Game Specific files
 /Assets/Scenes/KlootScenes/
 *.wav
+*.wav.meta
+*.mp3
+*.mp3.meta
+*.ogg
+*.ogg.meta
 spectrogram.png
+
+# Aduio files we would like to keep.
+!Lobby.mp3
+!Lobby.mp3.meta
+!Theme.mp3
+!Theme.mp3.meta
+!Whoosh.wav
+!Whoosh.wav.meta
