@@ -33,7 +33,7 @@ public class Jiggle : MonoBehaviour {
         this.omegaY += Time.deltaTime * speedY;
         this.omegaX %= Mathf.PI * 2;
         this.omegaY %= Mathf.PI * 2;
-        float moveX =  amplitudeX * Mathf.Cos(omegaX+phaseX);
+        float moveX = amplitudeX * Mathf.Cos(omegaX+phaseX);
         float moveY = amplitudeY * Mathf.Sin(omegaY+phaseY);
         rectTransform.localPosition = origin + new Vector3(moveX, moveY);
 	}

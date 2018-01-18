@@ -12,6 +12,7 @@ public class LookAtMouse : MonoBehaviour
         target.z = 5.0f;
         target = Camera.main.ScreenToWorldPoint(target);
         Quaternion targetRotation = Quaternion.LookRotation(target - transform.position);
+        
         // Smoothly rotate towards the target point.
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
     }

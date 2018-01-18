@@ -52,7 +52,7 @@ public class SelectAudioFile : MonoBehaviour {
         {
             yield return new WaitForEndOfFrame();
         }
-        audioSource.clip = www.audioClip;
+        audioSource.clip = www.GetAudioClip();
         yield return null;
     }
 

@@ -9,7 +9,6 @@ public class FloatRange {
     public float min;
     [Range(0,2)]
     public float max;
-    
 
     public FloatRange(float min, float max) {
         this.min = min;

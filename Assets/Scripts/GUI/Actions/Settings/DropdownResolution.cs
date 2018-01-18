@@ -11,6 +11,7 @@ public class DropdownResolution : Dropdown {
         int optionNumber = 0;
         Resolution[] resolutions = Screen.resolutions;
         options.Clear();
+
         foreach (Resolution resolution in resolutions)
         {
             options.Add(new OptionData(resolution.ToString()));
@@ -18,6 +19,7 @@ public class DropdownResolution : Dropdown {
                 this.value = optionNumber;
             optionNumber++;
         }
+
         this.onValueChanged.AddListener(delegate {
             Resolution resolution = resolutions[this.value];
             Screen.SetResolution(resolution.width, resolution.height, 

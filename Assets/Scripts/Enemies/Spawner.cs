@@ -33,8 +33,12 @@ public class Spawner : AudioImpactListener {
             Debug.LogError(e);
         }
 
-        Vector2 cameraVector2D = new Vector2(Camera.main.gameObject.transform.position.x, Camera.main.gameObject.transform.position.y);
+        Vector2 cameraVector2D = new Vector2(Camera.main.gameObject.transform.position.x, 
+                                             Camera.main.gameObject.transform.position.y);
         Vector2 spawnPosition = cameraVector2D + Random.insideUnitCircle.normalized * length;
-        GameObject go = Instantiate( ObjectToSpawn[ Random.Range( 0, maxSpawnableObjectTypeIndex)], spawnPosition, Quaternion.FromToRotation(spawnPosition.normalized, Vector3.zero), this.transform ) as GameObject;
+        GameObject go = Instantiate( ObjectToSpawn[ Random.Range( 0, maxSpawnableObjectTypeIndex)], 
+                                                                  spawnPosition, 
+                                                                  Quaternion.FromToRotation(spawnPosition.normalized, Vector3.zero), 
+                                                                  this.transform ) as GameObject;
     }
 }

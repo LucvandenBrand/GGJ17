@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,19 +6,29 @@ using UnityEngine.SceneManagement;
  * and load lobby scene. */
 [RequireComponent(typeof(AudioSource))]
 public class IricButton : MonoBehaviour {
+    // Object to animate.
     [SerializeField]
     private GameObject menuEye;
 
+    private const int MOUSE_LEFT = 0;
+
+    // Tweakable constants for the animation.
+    private const float PULSE_FREQUENCY = 10, PULSE_AMPLITUDE = 0.2f,
+                        PULSE_MINSCALE = 2.5f;
+    private const float LOAD_SCENE_DELAY = 0.5f;
+
     public void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(MOUSE_LEFT))
         {
             PulseAnimation anim = menuEye.AddComponent<PulseAnimation>();
-            anim.SetFrequency(10);
-            anim.SetAmplitude(0.2f);
-            anim.SetMinScale(2.5f);
+            anim.SetFrequency(PULSE_FREQUENCY);
+            anim.SetAmplitude(PULSE_AMPLITUDE);
+            anim.SetMinScale(PULSE_MINSCALE);
             GetComponent<AudioSource>().Play();
-            StartCoroutine("StartGame", 0.5f);
+
+            // Load the new scene, with a delay so the animation can play.
+            StartCoroutine("StartGame", LOAD_SCENE_DELAY);
         }
     }
 
