@@ -1,15 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
 /* Listens for key presses and assigns players to the individual pressing the key. */
-
-/* This entire class deserves to be set on fire. 
- * I strongly suggest running away now, whilst you are still clean. 
- * The things that happened here should never be spoken about again. 
- * There is no god.
- * - Luc */
 public class LobbySpawn : MonoBehaviour {
     [SerializeField]
     private GameObject playerPrefab;
@@ -17,24 +10,10 @@ public class LobbySpawn : MonoBehaviour {
     private GameObject playerSpawn;
 
     Control controllerScript;
-    private string leftTriggerName = "LeftTrigger";
-    private string rightTriggerName = "RightTrigger";
+    private const string TRIGGER = "TriggerP";
+    private const string START = "StartButtonJ1";
 
-    private List<int> assignedLeftPlayerIndexies = new List<int>();
-    private List<int> assignedRightPlayerIndexies = new List<int>();
-    private List<int> leftControllerNumberIndex = new List<int>();
-    private List<int> rightControllerNumberIndex = new List<int>();
-
-    int leftControllerNumber = 0;
-    int rightControllerNumber = 0;
-
-    /* Array to track which controller has been connected. 
-     * Initialized at false. */
-    bool[] controllerConnected = new bool[8];
-
-    /* Array to track which player has been spawned. 
-     * Initialized at false. */
-    bool[] playerSpawned = new bool[8];
+    private List<int> spawnedPlayers = new List<int>();
 
     private bool arrowKeysPlayerConnected = false;
     private bool wasdKeysPlayerConnected = false;
@@ -44,99 +23,17 @@ public class LobbySpawn : MonoBehaviour {
     void Update() {
         float threshold = 0.75f;
 
+        /* For every player, check if their trigger is pressed.
+         * If this is the case, and they are not spawned, spawn them. */
         for (int player = 0; player < 8; player++) {
-            int axis = player / 2 + 1;
-
-            if (player % 2 == 0) {
-                // Uneven, the left trigger.
-                string axisName = leftTriggerName + axis;
-                if (!playerSpawned[player] && (Input.GetAxisRaw(axisName) > threshold))
-                {
-                    leftControllerNumber = axis;
-                    leftControllerNumberIndex.Insert(axis - 1, leftControllerNumber);
-                    controllerConnected[player] = true;
+            // Uneven, the left trigger.
+            if (Input.GetAxisRaw(TRIGGER + player) > threshold) {
+                if (!spawnedPlayers.Contains(player)) {
+                    spawnedPlayers.Add(player);
+                    // Create new player.
+                    GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
+                    go.GetComponent<Control>().SetPlayerNumber(player);
                 }
-            } else {
-                // Even, the right trigger.
-                string axisName = rightTriggerName + axis;
-
-                if (!playerSpawned[player] && (Input.GetAxisRaw(axisName) > threshold))
-                {
-                    rightControllerNumber = axis;
-                    rightControllerNumberIndex.Insert(axis - 1, rightControllerNumber);
-                    controllerConnected[player] = true;
-                }
-            }
-        }
-
-        foreach (int leftControllerNumber in leftControllerNumberIndex)
-        {
-            if (leftControllerNumber == 1 && controllerConnected[0] && !playerSpawned[0])
-            {
-                GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-                go.GetComponent<Control>().SetLeftPlayerNumber(leftControllerNumber);
-                assignedLeftPlayerIndexies.Add(leftControllerNumber);
-                playerSpawned[0] = true;
-            }
-
-            else if (leftControllerNumber == 2 && controllerConnected[2] && !playerSpawned[2])
-            {
-                GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-                go.GetComponent<Control>().SetLeftPlayerNumber(leftControllerNumber);
-                assignedLeftPlayerIndexies.Add(leftControllerNumber);
-                playerSpawned[2] = true;
-            }
-
-            else if (leftControllerNumber == 3 && controllerConnected[4] && !playerSpawned[4])
-            {
-                GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-                go.GetComponent<Control>().SetLeftPlayerNumber(leftControllerNumber);
-                assignedLeftPlayerIndexies.Add(leftControllerNumber);
-                playerSpawned[4] = true;
-            }
-
-            else if (leftControllerNumber == 4 && controllerConnected[6] && !playerSpawned[6])
-            {
-                GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-                go.GetComponent<Control>().SetLeftPlayerNumber(leftControllerNumber);
-                assignedLeftPlayerIndexies.Add(leftControllerNumber);
-                playerSpawned[6] = true;
-            }
-
-        }
-
-        foreach (int rightControllerNumber in rightControllerNumberIndex)
-        {
-            if (rightControllerNumber == 1 && controllerConnected[1] && !playerSpawned[1])
-            {
-                GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-                go.GetComponent<Control>().SetRightPlayerNumber(rightControllerNumber);
-                assignedLeftPlayerIndexies.Add(rightControllerNumber);
-                playerSpawned[1] = true;
-            }
-
-            else if (rightControllerNumber == 2 && controllerConnected[3] && !playerSpawned[3])
-            {
-                GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-                go.GetComponent<Control>().SetRightPlayerNumber(rightControllerNumber);
-                assignedLeftPlayerIndexies.Add(rightControllerNumber);
-                playerSpawned[3] = true;
-            }
-
-            else if (rightControllerNumber == 3 && controllerConnected[5] && !playerSpawned[5])
-            {
-                GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-                go.GetComponent<Control>().SetRightPlayerNumber(rightControllerNumber);
-                assignedLeftPlayerIndexies.Add(rightControllerNumber);
-                playerSpawned[5] = true;
-            }
-
-            else if (rightControllerNumber == 4 && controllerConnected[7] && !playerSpawned[7])
-            {
-                GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-                go.GetComponent<Control>().SetRightPlayerNumber(rightControllerNumber);
-                assignedLeftPlayerIndexies.Add(rightControllerNumber);
-                playerSpawned[7] = true;
             }
         }
 
@@ -192,9 +89,9 @@ public class LobbySpawn : MonoBehaviour {
      * If so, we load the Game Scene whilst keeping the players loaded. */
     void OnButtonStartGame()
     {
-        if (Input.GetButtonDown("StartButtonJ1") || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetButtonDown(START) || Input.GetKeyDown(KeyCode.Return))
         {
-            if (assignedLeftPlayerIndexies.Count + assignedRightPlayerIndexies.Count > 0 
+            if (spawnedPlayers.Count > 0 
                 || arrowKeysPlayerConnected || wasdKeysPlayerConnected 
                 || ijklKeysPlayerConnected  || numpadKeysPlayerConnected)
             {

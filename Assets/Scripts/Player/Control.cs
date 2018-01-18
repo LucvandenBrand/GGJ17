@@ -3,12 +3,13 @@
 /* Allows users to control their player with keyboard and xbox controllers. */
 public class Control : MonoBehaviour
 {
+    private const string STICK_HORIZONTAL = "HSP";
+    private const string STICK_VERTICAL = "VSP";
+
     [SerializeField]
     private float movementSpeed = 1f;
     [SerializeField]
-    private int playerNumberLeft = 0;
-    [SerializeField]
-    private int playerNumberRight = 0;
+    private int playerNumber = -1;
     [SerializeField]
     private bool arrowKeysPlayer = false;
     [SerializeField]
@@ -18,12 +19,6 @@ public class Control : MonoBehaviour
     [SerializeField]
     private bool numpadKeysPlayer = false;
 
-    private string leftStickHorName = "HorizontalLeftStick";
-    private string leftStickVerName = "VerticalLeftStick";
-    private string rightStickHorName = "HorizontalRightStick";
-    private string rightStickVerName = "VerticalRightStick";
-    private string leftTriggerName = "LeftTrigger";
-    private string rightTriggerName = "RightTrigger";
     private float horInput;
     private float verInput;
     private Rigidbody2D rigidbodyCurrent;
@@ -33,14 +28,9 @@ public class Control : MonoBehaviour
         rigidbodyCurrent = gameObject.GetComponent<Rigidbody2D>();
     }
 
-    public void SetLeftPlayerNumber(int playerNr)
+    public void SetPlayerNumber(int playerNr)
     {
-        playerNumberLeft = playerNr;
-    }
-
-    public void SetRightPlayerNumber(int playerNr)
-    {
-        playerNumberRight = playerNr;
+        playerNumber = playerNr;
     }
 
     public void SetArrowKeysPlayer()
@@ -112,17 +102,10 @@ public class Control : MonoBehaviour
             verInput = arrUp - arrDown;
             horInput = arrRight - arrLeft;
         }
-
-        else if (playerNumberLeft > 0 && playerNumberLeft <= 4)
+        else
         {
-            horInput = Input.GetAxisRaw(leftStickHorName + playerNumberLeft);
-            verInput = Input.GetAxisRaw(leftStickVerName + playerNumberLeft);
-        }
-
-        else if (playerNumberRight > 0 && playerNumberRight <= 4)
-        {
-            horInput = Input.GetAxisRaw(rightStickHorName + (playerNumberRight));
-            verInput = Input.GetAxisRaw(rightStickVerName + (playerNumberRight));
+            horInput = Input.GetAxisRaw(STICK_HORIZONTAL + playerNumber);
+            verInput = Input.GetAxisRaw(STICK_VERTICAL + playerNumber);
         }
     }
 
