@@ -4,68 +4,46 @@ using UnityEngine;
 
 /* Listens for key presses and assigns players to the individual pressing the key. */
 public class LobbySpawn : MonoBehaviour {
+    private const string KEY_TRIGGER = "TriggerP";
+    private const string KEY_START = "StartButtonJ1";
+    private const int MAX_PLAYERS = 10;
+    private const float DRIFT_THRESHOLD = 0.75f;
+
     [SerializeField]
     private GameObject playerPrefab;
     [SerializeField]
     private GameObject playerSpawn;
 
-    Control controllerScript;
-    private const string TRIGGER = "TriggerP";
-    private const string START = "StartButtonJ1";
-
     private List<int> spawnedPlayers = new List<int>();
 
-    private bool arrowKeysPlayerConnected = false;
-    private bool wasdKeysPlayerConnected = false;
-    private bool ijklKeysPlayerConnected = false;
-    private bool numpadKeysPlayerConnected = false;
+    public void Update() {
+        CheckPlayerJoin();
+        OnButtonStartGame();
+    }
 
-    void Update() {
-        float threshold = 0.75f;
-
-        /* For every player, check if their trigger is pressed.
-         * If this is the case, and they are not spawned, spawn them. */
-        for (int player = 0; player < 8; player++) {
-            // Uneven, the left trigger.
-            if (Input.GetAxisRaw(TRIGGER + player) > threshold) {
+    /* For every player, check if their trigger is pressed.
+     * If this is the case, and they are not spawned, spawn them. */
+    private void CheckPlayerJoin() {
+        for (int player = 0; player < MAX_PLAYERS; player++)
+            if (Input.GetAxisRaw(KEY_TRIGGER + player) > DRIFT_THRESHOLD)
                 if (!spawnedPlayers.Contains(player)) {
                     spawnedPlayers.Add(player);
                     // Create new player.
                     GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
                     go.GetComponent<Control>().SetPlayerNumber(player);
                 }
+    }
+
+    /* Checks if the player wants to start the game and leave the lobby.
+     * If so, we load the Game Scene whilst keeping the players loaded. */
+    private void OnButtonStartGame()
+    {
+        if (Input.GetButtonDown(KEY_START) || Input.GetKeyDown(KeyCode.Return))
+            if (spawnedPlayers.Count > 0) 
+            {
+                Object.DontDestroyOnLoad(playerSpawn);
+                SceneManager.LoadScene(2, LoadSceneMode.Single);
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.UpArrow) && !arrowKeysPlayerConnected)
-        {
-            GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-            go.GetComponent<Control>().SetArrowKeysPlayer();
-            arrowKeysPlayerConnected = true;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.W) && !wasdKeysPlayerConnected)
-        {
-            GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-            go.GetComponent<Control>().SetWASDKeysPlayer();
-            wasdKeysPlayerConnected = true;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.I) && !ijklKeysPlayerConnected)
-        {
-            GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-            go.GetComponent<Control>().SetIJKLKeysPlayer();
-            ijklKeysPlayerConnected = true;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Keypad8) && !numpadKeysPlayerConnected)
-        {
-            GameObject go = Instantiate(playerPrefab, playerSpawn.gameObject.transform);
-            go.GetComponent<Control>().SetNumpadKeysPlayer();
-            numpadKeysPlayerConnected = true;
-        }
-
-        OnButtonStartGame();
     }
 
     private void LateUpdate()
@@ -74,7 +52,7 @@ public class LobbySpawn : MonoBehaviour {
     }
 
     /* Players are disallowed to move outside of the screen. Preventing death. */
-    void ClampPlayers()
+    private void ClampPlayers()
     {
         for (int index = 0; index < playerSpawn.transform.childCount; ++index)
         {
@@ -85,19 +63,4 @@ public class LobbySpawn : MonoBehaviour {
         }
     }
 
-    /* Checks if the player wants to start the game and leave the lobby.
-     * If so, we load the Game Scene whilst keeping the players loaded. */
-    void OnButtonStartGame()
-    {
-        if (Input.GetButtonDown(START) || Input.GetKeyDown(KeyCode.Return))
-        {
-            if (spawnedPlayers.Count > 0 
-                || arrowKeysPlayerConnected || wasdKeysPlayerConnected 
-                || ijklKeysPlayerConnected  || numpadKeysPlayerConnected)
-            {
-                Object.DontDestroyOnLoad(playerSpawn);
-                SceneManager.LoadScene(2, LoadSceneMode.Single);
-            }
-        }
-    }
 }
