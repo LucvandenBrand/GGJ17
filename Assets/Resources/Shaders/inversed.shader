@@ -1,26 +1,23 @@
 ﻿//ddInvertMapped shader: Daniel DeEntremont
 //Apply this shader to a mesh and watch all pixels behind the mesh become inverted!
 //Now has a texture mask input. White will invert colors behind while black remains the same.
-Shader "ddShaders/ddInvertMapped" {
+Shader "ddShaders/ddInvertMapped" 
+{
     Properties
     {
         _Color("Tint Color", Color) = (1,1,1,1)
-            _MainTex("Main Texture", 2D) = "white"{}
+        _MainTex("Main Texture", 2D) = "white"{}
     }
 
-
-
-		SubShader
+	SubShader
     {
-        Tags{ "Queue" = "Transparent" }
+        Tags { "Queue" = "Transparent" }
 
         Pass
         {
             ZWrite On
             ColorMask 0
         }
-
-
 
         Pass
         {
@@ -32,8 +29,7 @@ Shader "ddShaders/ddInvertMapped" {
                 combine texture * primary DOUBLE, texture * constant
             }
         }
-
-    }//end subshader
-}//end shader
+    }
+}
 
 
