@@ -7,9 +7,9 @@ A trippy rithm game you supply with your own music: it performs a FFT analysis o
 To easily see the original source, go to the frozen [ggj_version](https://github.com/Lukeslux/GGJ17/tree/ggj_version) branch.
 This is to make it easier if, one day, somebody wishes to reuse some of this code.
 
-## Screenshots
-![alt tag](https://raw.githubusercontent.com/Lukeslux/GGJ17/master/screenshots/screen_1920x1080_2017-01-24_00-30-40.png)
-![alt tag](https://raw.githubusercontent.com/Lukeslux/GGJ17/master/screenshots/screen_1920x1080_2017-01-24_00-35-22.png)
+## Preview
+![Game Cover](https://raw.githubusercontent.com/Lukeslux/GGJ17/master/screenshots/cover.png)
+![Screenshot](https://raw.githubusercontent.com/Lukeslux/GGJ17/master/screenshots/screen_1920x1080_2017-01-24_00-35-22.png)
 
 ## Binaries
 The binaries are more often than not behind the source, so feel free to build this repo to be sure of the freshest of experiences :wink:. A warm thanks to WM for hosting!
