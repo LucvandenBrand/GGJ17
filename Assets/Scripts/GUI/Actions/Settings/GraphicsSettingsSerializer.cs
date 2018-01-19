@@ -3,7 +3,8 @@
 /* Class that allows for storing and loading custom graphics
  * settings made by the user. It loads these settings 
  * on starting the script. */
-public class GraphicsSettingsSerializer : MonoBehaviour {
+public class GraphicsSettingsSerializer : MonoBehaviour
+{
     private static string GRAPHICS_SETGRAPHICS = "graphics_setgraphics";
     private static string GRAPHICS_FULLSCREEN = "graphics_fullscreen";
     private static string GRAPHICS_RESOLUTION = "graphics_resolution";

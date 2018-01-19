@@ -4,7 +4,10 @@ using UnityEngine.SceneManagement;
 
 /* Waits until all players have died and then shows a
  * gameover screen. */
-public class EndGameChecker : MonoBehaviour {
+public class EndGameChecker : MonoBehaviour
+{
+    private const string KEY_START = "StartButtonJ1";
+
     [SerializeField]
     private Canvas winScreen;
     [SerializeField]
@@ -12,7 +15,8 @@ public class EndGameChecker : MonoBehaviour {
     private bool gameOver = false; // Boolean that remembers wether or not a GameOver has triggered.
 
     /* Every frame, check for a game over state. */
-    void Update() {
+    void Update()
+    {
         Player[] players = FindObjectsOfType<Player>();
 
         if (CountLivingPlayers(players) == 0)
@@ -30,7 +34,7 @@ public class EndGameChecker : MonoBehaviour {
     /* When the start button has been pressed, return to lobby. */
     void OnButtonStartGame()
     {
-        if (Input.GetButtonDown("StartButtonJ1") || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetButtonDown(KEY_START) || Input.GetKeyDown(KeyCode.Return))
             ReturnToLobby();
     }
 
@@ -39,9 +43,8 @@ public class EndGameChecker : MonoBehaviour {
     {
         Player[] players = FindObjectsOfType<Player>();
         foreach (Player player in players)
-        {
             player.transform.SetParent(gameObject.transform);
-        }
+        
         SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
 
@@ -50,9 +53,8 @@ public class EndGameChecker : MonoBehaviour {
     {
         int liveCount = 0;
         foreach (Player player in players)
-        {
             if (player.GetLives() != 0) liveCount++;
-        }
+        
         return liveCount;
     }
 
@@ -73,13 +75,9 @@ public class EndGameChecker : MonoBehaviour {
         {
             string objName = "ScoreP";
             if (i == winner)
-            {
                 objName += 1;
-            }
             else
-            {
                 objName += stepCount++;
-            }
             string secondsStr = SecondFormatter.FormatSeconds((int)players[i].GetLiveTime());
             canvas.transform.Find(objName).GetComponent<Text>().text = secondsStr;
         }
@@ -90,21 +88,22 @@ public class EndGameChecker : MonoBehaviour {
     {
         int winner = 0;
         float maxLiveTime = 0;
+
         for (int i=0; i<players.Length; ++i)
-        {
             if (players[i].GetLiveTime() > maxLiveTime)
             {
                 maxLiveTime = players[i].GetLiveTime();
                 winner = i;
             }
-        }
+
         return winner;
     }
 
     /* Place players on the leaderboard and fix their positions. */
     private void SetLeaderBoardPosition(Player[] players)
     {
-        if (players.Length == 0) {
+        if (players.Length == 0)
+        {
             Debug.LogWarning("No Players exists on the leader board");
             return;
         }
@@ -120,7 +119,6 @@ public class EndGameChecker : MonoBehaviour {
         float stepX = 0.11f;
         int stepCount = 1;
         for (int i = 0; i < players.Length; ++i)
-        {
             if (i != winner)
             {
                 players[i].ShowPlayer(true);
@@ -132,6 +130,5 @@ public class EndGameChecker : MonoBehaviour {
                 players[i].transform.localScale = new Vector3(3.5f, 3.5f, 3.5f);
                 stepCount++;
             }
-        }
     }
 }

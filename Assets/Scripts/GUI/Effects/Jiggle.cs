@@ -2,7 +2,8 @@
 
 /* Will 'jiggle' the UI element this script is attached to. */
 [RequireComponent(typeof(RectTransform))]
-public class Jiggle : MonoBehaviour {
+public class Jiggle : MonoBehaviour
+{
     [SerializeField]
     private float speedX = 10;
     [SerializeField]
@@ -21,14 +22,16 @@ public class Jiggle : MonoBehaviour {
     private float omegaX = 0;
     private float omegaY = 0;
 
-	void Start () {
+	void Start ()
+    {
         this.rectTransform = gameObject.GetComponent<RectTransform>();
         this.origin = rectTransform.localPosition;
 	}
 	
 	/* Place the transform relative to the time passed and
      * set parameters. */
-	void Update () {
+	void Update ()
+    {
         this.omegaX += Time.deltaTime * speedX;
         this.omegaY += Time.deltaTime * speedY;
         this.omegaX %= Mathf.PI * 2;

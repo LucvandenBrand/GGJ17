@@ -3,7 +3,8 @@
 /* Animates the object to point to the direction the 
  * Control script is moving it. */
 [RequireComponent(typeof(Control))]
-public class EyeAnimator : MonoBehaviour {
+public class EyeAnimator : MonoBehaviour
+{
     private Control control;
 
     public void Start()
