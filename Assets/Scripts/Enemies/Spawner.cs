@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /* Spawns enemies added to its spawn lists bases on the music currently playing. */
-public class Spawner : AudioImpactListener {
+public class Spawner : AudioImpactListener
+{
     [SerializeField]
     private GameObject[] ObjectToSpawn;
     [SerializeField]
@@ -23,13 +23,17 @@ public class Spawner : AudioImpactListener {
         }
     }
 
-    void SpawnEnemy() {
+    void SpawnEnemy()
+    {
         int maxSpawnableObjectTypeIndex = 0;
-        try{
+        try
+        {
            maxSpawnableObjectTypeIndex = Mathf.CeilToInt((GetAudioSystemController().GetAudioSource().time / 
                                                           GetAudioSystemController().GetAudioSource().clip.length) * 
                                                           ObjectToSpawn.Length);
-        } catch (System.NullReferenceException e) {
+        }
+        catch (System.NullReferenceException e)
+        {
             Debug.LogError(e);
         }
 

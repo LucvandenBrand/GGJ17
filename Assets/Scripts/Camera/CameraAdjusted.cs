@@ -2,7 +2,8 @@
 
 /* Scales the object every frame to perfectly fit the main camera.
  * Best used for quads that need to be used as a background. */
-public class CameraAdjusted : MonoBehaviour {	
+public class CameraAdjusted : MonoBehaviour
+{	
 	void Update ()
     {
         ScaleMesh();

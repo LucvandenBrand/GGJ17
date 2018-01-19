@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class DropdownResolution : Dropdown {
 
 	/* On start, add all possible resolutions and add the event listener. */
-	protected override void Start () {
+	protected override void Start ()
+    {
         base.Start();
         Resolution curResolution = Screen.currentResolution;
         int optionNumber = 0;

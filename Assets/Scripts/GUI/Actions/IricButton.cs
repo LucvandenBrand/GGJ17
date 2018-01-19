@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 /* When this object is tapped, it will animate the menuEye object
  * and load lobby scene. */
 [RequireComponent(typeof(AudioSource))]
-public class IricButton : MonoBehaviour {
+public class IricButton : MonoBehaviour
+{
     // Object to animate.
     [SerializeField]
     private GameObject menuEye;

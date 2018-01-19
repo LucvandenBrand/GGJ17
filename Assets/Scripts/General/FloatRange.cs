@@ -4,13 +4,15 @@ using UnityEngine;
 
 /* Returns a random float between a given range. */
 [System.Serializable]
-public class FloatRange {
+public class FloatRange
+{
     [Range(0,1)]
     public float min;
     [Range(0,2)]
     public float max;
 
-    public FloatRange(float min, float max) {
+    public FloatRange(float min, float max)
+    {
         this.min = min;
         this.max = max;
     }

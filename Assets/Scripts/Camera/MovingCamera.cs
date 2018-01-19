@@ -3,7 +3,8 @@
 /* A camera that always moves in one given direction, 
  * based on the music currently playing. */
 [RequireComponent(typeof(Camera))]
-public class MovingCamera : AudioImpactListener {
+public class MovingCamera : AudioImpactListener
+{
 
     [SerializeField]
     private float intensitySumThreshold = 5;

@@ -7,7 +7,8 @@ using System.IO;
  * The audio file is downloaded into the assets and played on the
  * (required) attached AudioSource. */
 [RequireComponent( typeof(AudioSource) )]
-public class SelectAudioFile : MonoBehaviour {
+public class SelectAudioFile : MonoBehaviour
+{
     [SerializeField]
     private Canvas loadScreen;
     private AudioSource audioSource;
@@ -48,10 +49,10 @@ public class SelectAudioFile : MonoBehaviour {
             audioPath = convertSoundToWav(audioPath);
         string url = "file:///" + audioPath;
         WWW www = new WWW(url);
+
         while (!www.isDone)
-        {
             yield return new WaitForEndOfFrame();
-        }
+        
         audioSource.clip = www.GetAudioClip();
         yield return null;
     }

@@ -4,7 +4,8 @@ using UnityStandardAssets.ImageEffects;
 /* Makes the intensity of the bloom dependent on the music. */
 [RequireComponent( typeof(Camera) )]
 [RequireComponent( typeof(BloomOptimized) )]
-public class BloomImpactListener : AudioImpactListener {
+public class BloomImpactListener : AudioImpactListener
+{
     [SerializeField]
     private FloatRange bloomIntencity;
     private BloomOptimized bloomOptimized;

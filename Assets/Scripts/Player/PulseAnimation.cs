@@ -2,7 +2,8 @@
 
 /* Makes an object `pulse' by oscillating the scale
  *  until the script is removed. */
-public class PulseAnimation : MonoBehaviour {
+public class PulseAnimation : MonoBehaviour
+{
     [SerializeField]
     private float pulseSize = 1;
     [SerializeField]
